@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "concurrently \"nodemon server.js\" \"cd client && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,9 +32,11 @@
     "mongoose": "^7.2.4",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "bcrypt": "^5.1.0"
   },
   "devDependencies": {
-    "bcrypt": "^5.1.0"
+    "concurrently": "^8.2.0",
+    "nodemon": "^2.0.22"
   }
 }

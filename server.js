@@ -43,10 +43,7 @@ passport.use(
 
 
 // API Routers
-app.use('api/users', controllers.userController);
-
-
-
+app.use('/api/users', controllers.userController);
 
 // If no API routes are hit, send the build version of the React client
 app.use(express.static(path.join(__dirname, './client/build')));
@@ -64,6 +61,7 @@ const connectDb = () => {
 
 connectDb().then(async () => {
     app.listen(port, () => {
-        console.log(`mernBB server running on port ${port}`);
+        console.log(app._router.stack)
+        console.log(`Server running on port ${port}`);
     });
 });
