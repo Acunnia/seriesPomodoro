@@ -10,10 +10,13 @@ import AppHeader from "./components/Header";
 
 function App() {
   return (
-      <Layout>
-          <AppHeader />
-          <Content className={"wrap"}>
-                <Forum className={"content"}/>
+      <Layout className={"main"}>
+          <div className={"header-wrap"}>
+              <AppHeader/>
+          </div>
+          <Content className={"mainWrapper"}>
+              <span> Info del sistema </span>
+              <Forum />
           </Content>
           <Footer >Footer</Footer>
       </Layout>

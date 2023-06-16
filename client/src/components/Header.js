@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { AppstoreOutlined, MailOutlined, SettingOutlined,
 } from '@ant-design/icons';
+import './styles/Header.styles.css'
 
 const { Header } = Layout;
 

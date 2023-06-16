@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {List, Skeleton} from 'antd';
 import api from '../utils/api';
+import Category from '../components/Category'
+import styles from './styles/Forum.styles.css';
 
 const Forum = () => {
     const [loading, setLoading] = useState(false)
@@ -23,8 +25,8 @@ const Forum = () => {
     };
 
     return (
-        <div >
-            <section >
+        <div className={"main-forum"}>
+            <div className="category-container">
                 {loading ? (
                     <div>
                         <Skeleton active />
@@ -34,16 +36,11 @@ const Forum = () => {
                 ) : (
                     categories.map(category => {
                         return (
-                            <a className={"category-box"} style={{'border-color': '#0088CC'}}>
-                            //TODO Componente dumb hijo que muestra datitos
-                                <div className={"category-box-inner"}>
-                                    <div className={"description"}>{category.name}</div>
-                                </div>
-                            </a>
+                            <Category data={category} key={category._id} />
                         );
                     })
                 )}
-            </section>
+            </div>
         </div>
     );
 };
