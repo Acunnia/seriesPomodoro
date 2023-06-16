@@ -18,23 +18,32 @@ const Forum = () => {
                 setCategories(response.data.categories);
             })
             .catch((error) => {
-                console.error("Error al obtener las categorías:", error);
+                //TODO: Modal con error
             }).finally(() => setLoading(false));
     };
 
     return (
-        <div>
-            {loading ? (
-                <div>
-                    <Skeleton active />
-                    <Skeleton active />
-                    <Skeleton active />
-                </div>
-            ) : (
-                categories.map(category => {
-                    return <span>{category.name}</span>;
-                })
-            )}
+        <div >
+            <section >
+                {loading ? (
+                    <div>
+                        <Skeleton active />
+                        <Skeleton active />
+                        <Skeleton active />
+                    </div>
+                ) : (
+                    categories.map(category => {
+                        return (
+                            <a className={"category-box"} style={{'border-color': '#0088CC'}}>
+                            //TODO Componente dumb hijo que muestra datitos
+                                <div className={"category-box-inner"}>
+                                    <div className={"description"}>{category.name}</div>
+                                </div>
+                            </a>
+                        );
+                    })
+                )}
+            </section>
         </div>
     );
 };

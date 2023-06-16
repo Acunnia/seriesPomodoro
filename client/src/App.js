@@ -3,17 +3,20 @@ import './App.css';
 import RegistrationForm from "./containers/RegistrationForm";
 import CategoryForm from "./containers/CategoryCreate";
 import Forum from "./containers/Forum";
+import Layout, {Content, Footer} from "antd/es/layout/layout";
+import AppHeader from "./components/Header";
+
+
 
 function App() {
   return (
-    <div className="App">
-      <h1>Formulario de Registro</h1>
-      <RegistrationForm />
-        <h1>Crear Categoría</h1>
-        <CategoryForm />
-
-        <Forum />
-    </div>
+      <Layout>
+          <AppHeader />
+          <Content className={"wrap"}>
+                <Forum className={"content"}/>
+          </Content>
+          <Footer >Footer</Footer>
+      </Layout>
   );
 }
 

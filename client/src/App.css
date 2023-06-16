@@ -1,5 +1,37 @@
+:root{
+  --primary: rgb(221,221,221);
+  --base-font-size: 0.938em;
+  --line-height-large: 1.4;
+  --secondary: #222222;
+  --d-max-width: 1110px;
+}
+
 .App {
-  text-align: center;
+  position: relative;
+  text-align: left;
+  direction: ltr;
+  display: block;
+}
+
+.wrap {
+  max-width: var(--d-max-width);
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0 10px;
+}
+
+html {
+  color: var(--primary);
+  font-family: Metropolis;
+  font-size: var(--base-font-size);
+  line-height: var(--line-height-large);
+  background-color: var(--secondary);
+  overflow-y: scroll;
+  direction: ltr;
+}
+
+.content{
+  width: 100%;
 }
 
 .App-logo {
@@ -36,3 +68,32 @@
     transform: rotate(360deg);
   }
 }
+
+
+.header {
+  background-color: #001529;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.header-container{
+  height: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  align-items: center;
+  display: flex;
+  max-width: var(--d-max-width);
+  justify-content: space-between;
+}
+
+.logo {
+  width: 120px;
+  height: 31px;
+  background-color: #fff;
+}
+
+.menu {
+  min-width: 400px;
+}
+
+
