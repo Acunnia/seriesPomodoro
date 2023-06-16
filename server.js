@@ -44,6 +44,8 @@ passport.use(
 
 // API Routers
 app.use('/api/users', controllers.userController);
+app.use('/api/categories', controllers.categoryController);
+
 
 // If no API routes are hit, send the build version of the React client
 app.use(express.static(path.join(__dirname, './client/build')));

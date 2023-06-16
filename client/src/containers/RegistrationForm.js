@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
-import apì from "../utils/api"
 import api from "../utils/api";
 
 const RegistrationForm = () => {

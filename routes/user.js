@@ -41,27 +41,19 @@ userController.post('/register', (req, res) => {
                         newUser
                             .save()
                             .then(savedUser => {
-                                // Se completa la lógica adicional después de guardar el usuario
-                                // ...
                                 res.status(200).json({user: savedUser});
                             })
                             .catch(saveErr => {
-                                // Manejo de error al guardar el usuario
-                                // ...
                                 res.status(400).json({msg: 'Failed to register user.', err: saveErr});
                             });
                     });
                 });
             })
             .catch(roleErr => {
-                // Manejo de error al buscar el rol
-                // ...
                 res.status(500).json({msg: 'Internal server error', err: roleErr});
             });
         })
         .catch(userErr => {
-            // Manejo de error al buscar el usuario existente
-            // ...
             res.status(500).json({msg: 'Internal server error', err: userErr});
         })
 

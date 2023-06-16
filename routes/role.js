@@ -9,7 +9,4 @@ roleController.get('/', (req, res) => {
     });
 });
 
-
-CRUD
-
-module.exports = userController
+module.exports = roleController
