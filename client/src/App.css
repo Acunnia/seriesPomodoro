@@ -1,5 +1,5 @@
 :root{
-  --primary: rgb(221,221,221);
+  --primary: rgb(221, 221, 221);
   --base-font-size: 0.938em;
   --line-height-large: 1.4;
   --secondary: #222222;
@@ -98,12 +98,11 @@ html {
   font-size: 15.008px;
   height: auto;
   line-height: 21.0112px;
-  margin-left: 381px;
-  margin-right: 381px;
-  max-width: 1110px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: var(--d-max-width);
   padding: 0 10px;
-  text-size-adjust: 100%;
-  width: 1110px;
+  width: 100%;
 }
 
 

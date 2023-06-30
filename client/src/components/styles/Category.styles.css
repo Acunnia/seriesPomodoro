@@ -5,11 +5,18 @@
 .category-box{
     box-sizing: border-box;
     border: solid 1px rgb(49,49,49);
-    background-color: rgba(17, 17, 17, 0.75);
+    background: rgba(17, 17, 17, 0.75);
     border-left: solid rgb(0,136,204) 3px;
     border-radius: 3px;
     break-inside: avoid;
     position: relative;
     margin: 0px 0px 1em;
+    padding: 1em;
     width: 100%;
+    cursor: pointer;
+    transition: background 0.25s ease-in-out 0s;
+}
+
+.category-box:hover {
+    background: rgba(255, 255, 255, 0.1);
 }

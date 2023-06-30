@@ -12,7 +12,7 @@ const CategoryForm = () => {
         })
             .then((response) => {
                 // Lógica adicional después de un registro exitoso
-                console.log("Category created:", response.data);
+                console.log("TopicList created:", response.data);
             })
             .catch((error) => {
                 // Lógica de manejo de error
