@@ -60,15 +60,25 @@ categoryController.get('/topics', (req, res) => {
 
         })
         .lean()
-        .then(subcategory => {
-            result.topics = subcategory.topics;
-            result.name = subcategory.name;
-            result.description = subcategory.description;
+        .then(category  => {
+            result.topics = category.topics;
+            result.name = category.name;
+            result.description = category.description;
+            result.subcategories = category.subcategories;
 
-            return Topic.countDocuments({ subcategory: subcategory._id });
+            const topicIds = category.subcategories.reduce((ids, subcategory) => {
+                if (subcategory.topics && subcategory.topics.length > 0) {
+                    const subcategoryTopicIds = subcategory.topics.map(topic => topic._id);
+                    return ids.concat(subcategoryTopicIds);
+                }
+                return ids;
+            }, []);
+
+            return Topic.countDocuments({ _id: { $in: topicIds } });
         })
         .then(count => {
             result.totalPages = Math.ceil(count / limit);
+
             return res.status(200).json(result);
         })
         .catch(err =>{

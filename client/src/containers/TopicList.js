@@ -3,9 +3,12 @@ import {Link, useSearchParams} from "react-router-dom";
 import {Col, Skeleton, Modal, Button} from "antd";
 import api from "../utils/api";
 import {FormOutlined} from "@ant-design/icons";
+import Category from "../components/Category";
+import SubCategory from "../components/SubCategory";
 
 const TopicList = props => {
     const [contentLoading, setContentLoading] = useState(true);
+    const [subcategories, setSubcategories] = useState([])
     const [info, setInfo] = useState({ name: '', description: '' });
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id")
@@ -17,8 +20,10 @@ const TopicList = props => {
 
     // Initial load
     useEffect(() => {
+        setContentLoading(true);
         api.get(`/categories/topics?id=${id}`)
             .then(result => {
+                setSubcategories(result.data.subcategories)
                 setTopics(result.data.topics);
                 setInfo({
                     name: result.data.name,
@@ -61,8 +66,20 @@ const TopicList = props => {
 
     return (
         <div>
-            <div>
-                <span>todo: sub categorias</span>
+            <div className="category-container">
+                {contentLoading ? (
+                    <div>
+                        <Skeleton active />
+                        <Skeleton active />
+                        <Skeleton active />
+                    </div>
+                ) : (
+                    subcategories.map(subcategory => {
+                        return (
+                            <SubCategory data={subcategory} key={subcategory._id} />
+                        );
+                    })
+                )}
             </div>
             <div>
                 <span>todo: topics</span>
