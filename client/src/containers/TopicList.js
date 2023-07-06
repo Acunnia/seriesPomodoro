@@ -3,7 +3,6 @@ import {Link, useSearchParams} from "react-router-dom";
 import {Col, Skeleton, Modal, Button} from "antd";
 import api from "../utils/api";
 import {FormOutlined} from "@ant-design/icons";
-import Category from "../components/Category";
 import SubCategory from "../components/SubCategory";
 
 const TopicList = props => {

@@ -59,4 +59,10 @@ userController.post('/register', (req, res) => {
 
 });
 
+userController.post('/login', (req,res) => {
+    console.log("login")
+    //TODO: LOGIN logic
+
+})
+
 module.exports = userController

@@ -13,11 +13,9 @@ const RegistrationForm = () => {
                 password: values.password,
             })
             .then((response) => {
-                // Lógica adicional después de un registro exitoso
                 console.log("Registro exitoso:", response.data);
             })
             .catch((error) => {
-                // Lógica de manejo de error
                 console.error("Error al registrar:", error);
             })
             .finally(() => {
