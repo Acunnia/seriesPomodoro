@@ -1,26 +1,59 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { Layout, Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined,
+import {
+    AppstoreOutlined,
+    LoginOutlined,
+    LogoutOutlined,
+    MailOutlined,
+    SettingOutlined,
+    UserAddOutlined
 } from '@ant-design/icons';
 import './styles/Header.styles.css'
+import {NavLink, useNavigate} from "react-router-dom";
+import {AuthContext} from "../utils/auth";
+import Modal from "antd/es/modal/Modal";
 
 const { Header } = Layout;
 
 const AppHeader = () => {
+    const { dispatch, state } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const logout = () => {
+        Modal.confirm({
+            title: 'Logout?',
+            onOk: () => {
+                dispatch({
+                    type: 'LOGOUT',
+                });
+                navigate('/');
+            },
+        });
+    };
+
     return (
         <Header className="header">
             <div className={"header-container"}>
                 <div className="logo" />
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} className={"menu"}>
                     <Menu.Item key="1" icon={<AppstoreOutlined />}>
-                        Opción 1
+                        <NavLink to="/">Boards</NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<MailOutlined />}>
-                        Opción 2
-                    </Menu.Item>
-                    <Menu.Item key="3" icon={<SettingOutlined />}>
-                        Opción 3
-                    </Menu.Item>
+                    {state.isAuthenticated && (
+                        <Menu.Item icon={<LogoutOutlined />} onClick={logout}>
+                            Logout
+                        </Menu.Item>
+                    )}
+                    {!state.isAuthenticated && (
+                        <Menu.Item key="/login" icon={<LoginOutlined />}>
+                            <NavLink to="/login">Login</NavLink>
+                        </Menu.Item>
+                    )}
+                    {!state.isAuthenticated && (
+                        <Menu.Item key="/register" icon={<UserAddOutlined />}>
+                            <NavLink to="/register">Register</NavLink>
+                        </Menu.Item>
+                    )}
                 </Menu>
             </div>
         </Header>

@@ -8,6 +8,7 @@ const Forum = () => {
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([]);
 
+
     useEffect(() => {
         fetchCategories();
     }, []);
