@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Page from '../../components/Page/Page';
-import styles from './NewTopic.module.css';
 import { Row, Col, Typography, Form, Input, Button, Modal, Spin } from 'antd';
 import { CommentOutlined } from '@ant-design/icons';
-import api from '../../utils/API';
-import { useHistory, Link } from 'react-router-dom';
-import { AuthContext } from '../../App';
+import api from '../utils/api';
+import { Link, useNavigate, useSearchParams} from 'react-router-dom';
+import { AuthContext} from "../utils/auth";
 
 // antd
 const { Title, Text } = Typography;
@@ -14,15 +12,15 @@ const { TextArea } = Input;
 const TopicForm = props => {
     const [loading, setLoading] = useState(false);
     const [subcategory, setSubcategory] = useState(null);
-    const history = useHistory();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     const { state } = useContext(AuthContext);
-    const queryParams = props.location.search;
-    const shortid = new URLSearchParams(queryParams).get('sid');
+    const catID = searchParams.get("id")
 
     useEffect(() => {
-        api.get(`/subcategories/info?sid=${shortid}`).then(result => {
+        /*api.get(`/subcategories/info?id=${catID}`).then(result => {
             setSubcategory(result.data);
-        });
+        });*/
     }, []);
 
     const onFinish = data => {
@@ -30,16 +28,16 @@ const TopicForm = props => {
 
         const topicData = {
             ...data,
-            //todo: añadir el id del usaurio (author: state.user.id)
+            author: state.user.id,
             subcategory: subcategory._id,
         };
 
         api.post('/topics/add', topicData, {
-            //todo: añadir headers de seguridad con el JWT (headers: { Authorization: `Bearer ${state.token}` },)
+            headers: { Authorization: `Bearer ${state.token}` },
         })
             .then(result => {
                 console.log(result.data);
-                history.push(`/topic?sid=${result.data.topic.shortid}`);
+                navigate(`/topic?sid=${result.data.topic.id}`);
             })
             .catch(e => {
                 setLoading(false);
@@ -51,14 +49,14 @@ const TopicForm = props => {
     };
 
     return (
-        <Page>
-            <Row className={styles.MainRow}>
+        <div>
+            <Row className={'MainRow'}>
                 <Col span={24}>
-                    <div className={styles.NewTopic}>
+                    <div className={'NewTopic'}>
                         <Title level={3}>New topic</Title>
                         <Text>
                             Posting in{' '}
-                            <Link to={`/subcategory?sid=${shortid}`}>
+                            <Link to={`/subcategory?sid=${catID}`}>
                                 {subcategory ? (
                                     subcategory.name
                                 ) : (
@@ -114,7 +112,7 @@ const TopicForm = props => {
                     </div>
                 </Col>
             </Row>
-        </Page>
+        </div>
     );
 };
 

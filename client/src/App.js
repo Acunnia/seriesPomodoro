@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TopicList from "./containers/TopicList";
 import {useEffect, useReducer} from "react";
 import {reducer, AuthContext} from "./utils/auth";
+import TopicForm from "./containers/TopicForm";
 
 const authInitialState = {
     user: null,
@@ -49,6 +50,7 @@ function App() {
                               <Route path="/register" element={<RegistrationForm/>} />
                               <Route path="/category" element={<TopicList/>} />
                               <Route path="/newcategory" element={<CategoryForm/>} />
+                              <Route path="/newtopic" element={<TopicForm/>} />
                           </Routes>
                       </Content>
                       <Footer>Footer</Footer>

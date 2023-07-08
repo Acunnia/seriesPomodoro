@@ -4,7 +4,6 @@ const userController = express.Router();
 const User = require('../models/user.model')
 const Role = require('../models/role.model')
 const secret = process.env.JWTSECRET || 'mernBB-default-secret';
-const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 userController.get('/', (req, res) => {
