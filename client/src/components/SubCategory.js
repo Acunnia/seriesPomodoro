@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Category = props => {
     const navigate = useNavigate();
+
     const goToSubCategory = () => {
         navigate(`/category?id=${props.data._id}`, {
             state: {
+                query: "subcat",
                 id: props.data._id,
                 name: props.data.name,
                 description: props.data.description,

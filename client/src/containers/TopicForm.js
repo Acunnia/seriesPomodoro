@@ -18,9 +18,11 @@ const TopicForm = props => {
     const catID = searchParams.get("id")
 
     useEffect(() => {
-        /*api.get(`/subcategories/info?id=${catID}`).then(result => {
+
+        api.get(`/subcategories/info?id=${catID}`).then(result => {
+            console.log(result)
             setSubcategory(result.data);
-        });*/
+        });
     }, []);
 
     const onFinish = data => {
@@ -36,8 +38,7 @@ const TopicForm = props => {
             headers: { Authorization: `Bearer ${state.token}` },
         })
             .then(result => {
-                console.log(result.data);
-                navigate(`/topic?sid=${result.data.topic.id}`);
+                navigate(`/topic?id=${result.data.topic.id}`);
             })
             .catch(e => {
                 setLoading(false);
@@ -55,10 +56,10 @@ const TopicForm = props => {
                     <div className={'NewTopic'}>
                         <Title level={3}>New topic</Title>
                         <Text>
-                            Posting in{' '}
-                            <Link to={`/subcategory?sid=${catID}`}>
+                            Posteando en{' '}
+                            <Link to={`/subcategory?id=${catID}`}>
                                 {subcategory ? (
-                                    subcategory.name
+                                    subcategory.description
                                 ) : (
                                     <Spin size="small" style={{ marginLeft: '5px' }} />
                                 )}

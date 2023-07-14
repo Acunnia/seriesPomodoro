@@ -89,7 +89,6 @@ categoryController.get('/topics', (req, res) => {
 });
 
 
-// [/api/subcategories] /topics
-// get all topics from a subcategory
+// todo: get all topics from a subcategory /api/subcategories/topics
 
 module.exports = categoryController

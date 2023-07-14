@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useSearchParams} from "react-router-dom";
+import {Link, useSearchParams, useLocation} from "react-router-dom";
 import {Col, Skeleton, Modal, Button} from "antd";
 import api from "../utils/api";
 import {FormOutlined} from "@ant-design/icons";
@@ -16,31 +16,36 @@ const TopicList = props => {
         currentPage: null,
         totalPages: null,
     });
+    const location = useLocation();
+    const isSubcategory = location.state && location.state.query === 'subcat';
 
-    // Initial load
     useEffect(() => {
         setContentLoading(true);
-        api.get(`/categories/topics?id=${id}`)
-            .then(result => {
-                setSubcategories(result.data.subcategories)
-                setTopics(result.data.topics);
-                setInfo({
-                    name: result.data.name,
-                    description: result.data.description,
+        if (isSubcategory) {
+            console.log("Subcat")
+        } else {
+            api.get(`/categories/topics?id=${id}`)
+                .then(result => {
+                    setSubcategories(result.data.subcategories)
+                    setTopics(result.data.topics);
+                    setInfo({
+                        name: result.data.name,
+                        description: result.data.description,
+                    });
+                    setPages({
+                        currentPage: result.data.currentPage,
+                        totalPages: result.data.totalPages * 10,
+                    });
+                    setContentLoading(false);
+                })
+                .catch(e => {
+                    Modal.error({
+                        title: 'An error occurred',
+                        content: e.message,
+                    });
                 });
-                setPages({
-                    currentPage: result.data.currentPage,
-                    totalPages: result.data.totalPages * 10,
-                });
-                setContentLoading(false);
-            })
-            .catch(e => {
-                Modal.error({
-                    title: 'An error occurred',
-                    content: e.message,
-                });
-            });
-    }, [props.id, setContentLoading, setInfo]);
+        }
+    }, [props.id, isSubcategory, setContentLoading, setInfo]);
 
     const fetchPage = page => {
         setContentLoading(true);
