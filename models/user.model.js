@@ -8,8 +8,8 @@ const userSchema = new mongoose.Schema({
     role: {         type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
     bio: {          type: String},
     registerDate: { type: Date,                                                              default: Date.now},
-    replys: [{       type: mongoose.Schema.Types.ObjectId, ref: 'Reply'}],
-    topics: [{       type: mongoose.Schema.Types.ObjectId, ref: 'Topic'}],
+    replies: [{     type: mongoose.Schema.Types.ObjectId, ref: 'Reply'}],
+    topics: [{      type: mongoose.Schema.Types.ObjectId, ref: 'Topic'}],
 }, { collection: 'users' });
 
 // Método para cifrar la contraseña antes de guardarla en la base de datos

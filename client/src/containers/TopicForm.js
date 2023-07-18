@@ -33,6 +33,8 @@ const TopicForm = props => {
             subcategory: subcategory._id,
         };
 
+        console.log(topicData)
+
         api.post('/topics/create', topicData, {
             headers: {
                 'Authorization': `Bearer ${state.token}`,
@@ -40,7 +42,7 @@ const TopicForm = props => {
             },
         })
             .then(result => {
-                navigate(`/topic?id=${result.data.topic.id}`);
+                navigate(`/topic?id=${result.data.topic._id}`);
             })
             .catch(e => {
                 setLoading(false);
@@ -84,8 +86,8 @@ const TopicForm = props => {
                             >
                                 <Input placeholder="Title" disabled={loading} />
                             </Form.Item>
-                            <Form.Item name="subtitle">
-                                <Input placeholder="Subtitle (optional)" disabled={loading} />
+                            <Form.Item name="description">
+                                <Input placeholder="Subtitle/Description (optional)" disabled={loading} />
                             </Form.Item>
                             <Form.Item
                                 name="message"
