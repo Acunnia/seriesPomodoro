@@ -4,6 +4,7 @@ import { CommentOutlined } from '@ant-design/icons';
 import api from '../utils/api';
 import { Link, useNavigate, useSearchParams} from 'react-router-dom';
 import { AuthContext} from "../utils/auth";
+import {log} from "async";
 
 // antd
 const { Title, Text } = Typography;
@@ -18,14 +19,12 @@ const TopicForm = props => {
     const catID = searchParams.get("id")
 
     useEffect(() => {
-
         api.get(`/subcategories/info?id=${catID}`).then(result => {
-            console.log(result)
             setSubcategory(result.data);
         });
     }, []);
 
-    const onFinish = data => {
+    const onSubmit = data => {
         setLoading(true);
 
         const topicData = {
@@ -34,8 +33,11 @@ const TopicForm = props => {
             subcategory: subcategory._id,
         };
 
-        api.post('/topics/add', topicData, {
-            headers: { Authorization: `Bearer ${state.token}` },
+        api.post('/topics/create', topicData, {
+            headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
+            },
         })
             .then(result => {
                 navigate(`/topic?id=${result.data.topic.id}`);
@@ -67,7 +69,7 @@ const TopicForm = props => {
                         </Text>
                         <Form
                             name="login"
-                            onFinish={onFinish}
+                            onFinish={onSubmit}
                             style={{ marginTop: '40px' }}
                         >
                             <Form.Item
