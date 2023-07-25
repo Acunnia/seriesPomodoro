@@ -29,13 +29,13 @@ categoryController.post('/create', (req, res) => {
 })
 
 // [/api/categories] /topics
-// get all topics from a category
+// get all topics and subcategories from a category
 categoryController.get('/topics', (req, res) => {
     const { page = 1, limit = 10, id = null } = req.query;
     const result = { currentPage: page };
 
     if (!id) {
-        return res.status(400).json({ msg: 'No id provided.' });
+        return res.status(400).json({ msg: 'No id.' });
     }
 
     Category.findById(id)
@@ -59,22 +59,23 @@ categoryController.get('/topics', (req, res) => {
             }
 
         })
-        .lean()
         .then(category  => {
-            result.topics = category.topics;
+            if (!category) {
+                return res.status(404).json({ msg: 'Category not found.' });
+            }
+
+            result.topics = category.subcategories.reduce((topics, subcategory) => {
+                if (subcategory.topics && subcategory.topics.length > 0) {
+                    topics.push(...subcategory.topics);
+                }
+                return topics;
+            }, []);
+
             result.name = category.name;
             result.description = category.description;
             result.subcategories = category.subcategories;
 
-            const topicIds = category.subcategories.reduce((ids, subcategory) => {
-                if (subcategory.topics && subcategory.topics.length > 0) {
-                    const subcategoryTopicIds = subcategory.topics.map(topic => topic._id);
-                    return ids.concat(subcategoryTopicIds);
-                }
-                return ids;
-            }, []);
-
-            return Topic.countDocuments({ _id: { $in: topicIds } });
+            return Topic.countDocuments({ _id: { $in: result.topics } });
         })
         .then(count => {
             result.totalPages = Math.ceil(count / limit);

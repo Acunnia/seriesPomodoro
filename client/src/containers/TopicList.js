@@ -8,7 +8,6 @@ import SubCategory from "../components/SubCategory";
 const TopicList = props => {
     const [contentLoading, setContentLoading] = useState(true);
     const [subcategories, setSubcategories] = useState([])
-    const [info, setInfo] = useState({ name: '', description: '' });
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id")
     const [topics, setTopics] = useState([]);
@@ -22,16 +21,22 @@ const TopicList = props => {
     useEffect(() => {
         setContentLoading(true);
         if (isSubcategory) {
-            console.log("Subcat")
+            api.get(`/subcategories/topics?id=${id}`)
+                .then((result) => {
+                    setTopics(result.data.topics);
+                    setContentLoading(false);
+                })
+                .catch((e) => {
+                    Modal.error({
+                        title: 'An error occurred',
+                        content: e.message,
+                    });
+                });
         } else {
             api.get(`/categories/topics?id=${id}`)
                 .then(result => {
                     setSubcategories(result.data.subcategories)
                     setTopics(result.data.topics);
-                    setInfo({
-                        name: result.data.name,
-                        description: result.data.description,
-                    });
                     setPages({
                         currentPage: result.data.currentPage,
                         totalPages: result.data.totalPages * 10,
@@ -45,7 +50,7 @@ const TopicList = props => {
                     });
                 });
         }
-    }, [props.id, isSubcategory, setContentLoading, setInfo]);
+    }, [props.id, isSubcategory, setContentLoading]);
 
     const fetchPage = page => {
         setContentLoading(true);
@@ -86,7 +91,18 @@ const TopicList = props => {
                 )}
             </div>
             <div>
-                <span>todo: topics</span>
+                {contentLoading ? (
+                    <div>
+                        <Skeleton active />
+                        <Skeleton active />
+                        <Skeleton active />
+                    </div>
+                ) : (
+                    topics.map(topic => {
+                        return <span>{topic.title}</span>
+
+                    })
+                )}
 
                 <Link
                     to={`/newsubcat?id=${id}`}

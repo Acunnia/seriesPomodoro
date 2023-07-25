@@ -3,6 +3,7 @@ import RegistrationForm from "./containers/RegistrationForm";
 import CategoryForm from "./containers/CategoryCreate";
 import Forum from "./containers/Forum";
 import Login from "./containers/Login"
+import Topic from "./containers/Topic"
 import Layout, {Content, Footer} from "antd/es/layout/layout";
 import AppHeader from "./components/Header";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -49,6 +50,7 @@ function App() {
                               <Route path="/login"  element={<Login/>} />
                               <Route path="/register" element={<RegistrationForm/>} />
                               <Route path="/category" element={<TopicList/>} />
+                              <Route path="/topic" element={<Topic/>} />
                               <Route path="/newcategory" element={<CategoryForm/>} />
                               <Route path="/newtopic" element={<TopicForm/>} />
                           </Routes>
