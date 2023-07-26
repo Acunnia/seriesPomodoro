@@ -63,7 +63,7 @@ const TopicForm = props => {
                             Posteando en{' '}
                             <Link to={`/subcategory?id=${catID}`}>
                                 {subcategory ? (
-                                    subcategory.description
+                                    subcategory.name
                                 ) : (
                                     <Spin size="small" style={{ marginLeft: '5px' }} />
                                 )}

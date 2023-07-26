@@ -6,6 +6,7 @@ import {FormOutlined} from "@ant-design/icons";
 import SubCategory from "../components/SubCategory";
 
 const TopicList = props => {
+    const [ubication, setUbication] = useState("")
     const [contentLoading, setContentLoading] = useState(true);
     const [subcategories, setSubcategories] = useState([])
     const [searchParams, setSearchParams] = useSearchParams();
@@ -21,9 +22,12 @@ const TopicList = props => {
     useEffect(() => {
         setContentLoading(true);
         if (isSubcategory) {
+            console.log("subcategory")
             api.get(`/subcategories/topics?id=${id}`)
                 .then((result) => {
+                    setSubcategories([])
                     setTopics(result.data.topics);
+                    setUbication(result.data.name)
                     setContentLoading(false);
                 })
                 .catch((e) => {
@@ -37,6 +41,7 @@ const TopicList = props => {
                 .then(result => {
                     setSubcategories(result.data.subcategories)
                     setTopics(result.data.topics);
+                    setUbication(result.data.name)
                     setPages({
                         currentPage: result.data.currentPage,
                         totalPages: result.data.totalPages * 10,
@@ -75,6 +80,15 @@ const TopicList = props => {
 
     return (
         <div>
+            {contentLoading ? (
+                <div>
+                    <Skeleton active />
+                </div>
+            ) : (
+                <div>
+                    <span>Now on: {ubication}</span>
+                </div>
+            )}
             <div className="category-container">
                 {contentLoading ? (
                     <div>

@@ -30,65 +30,64 @@ categoryController.post('/create', (req, res) => {
 
 // [/api/categories] /topics
 // get all topics and subcategories from a category
-categoryController.get('/topics', (req, res) => {
-    const { page = 1, limit = 10, id = null } = req.query;
-    const result = { currentPage: page };
+categoryController.get('/topics', async (req, res) => {
+    try {
+        const { page = 1, limit = 10, id = null } = req.query;
 
-    if (!id) {
-        return res.status(400).json({ msg: 'No id.' });
-    }
+        // Validar que id exista
+        if (!id) {
+            return res.status(400).json({ msg: 'No id provided.' });
+        }
 
-    Category.findById(id)
-        .populate({
-            path: 'subcategories',
-            populate: {
-                path: 'topics',
-                options:{
-                    limit,
-                    skip: (page - 1) * limit,
-                    sort: { updatedAt: -1 },
-                },
+        const result = { currentPage: page };
+
+        // Buscar la categoría por su ID y poblar sus subcategorías y temas relacionados
+        const category = await Category.findById(id)
+            .populate({
+                path: 'subcategories',
                 populate: {
-                    path: 'lastreply',
-                    select: '-message',
-                    populate: {
-                        path: 'author',
-                        select: 'username',
+                    path: 'topics',
+                    options: {
+                        limit,
+                        skip: (page - 1) * limit,
+                        sort: { updatedAt: -1 },
                     },
-                }
+                    populate: {
+                        path: 'lastreply',
+                        select: '-message',
+                        populate: {
+                            path: 'author',
+                            select: 'username',
+                        },
+                    },
+                },
+            });
+
+        if (!category) {
+            return res.status(404).json({ msg: 'Category not found.' });
+        }
+
+        result.topics = category.subcategories.reduce((topics, subcategory) => {
+            if (subcategory.topics && subcategory.topics.length > 0) {
+                topics.push(...subcategory.topics);
             }
+            return topics;
+        }, []);
 
-        })
-        .then(category  => {
-            if (!category) {
-                return res.status(404).json({ msg: 'Category not found.' });
-            }
+        result.name = category.name;
+        result.description = category.description;
+        result.subcategories = category.subcategories;
 
-            result.topics = category.subcategories.reduce((topics, subcategory) => {
-                if (subcategory.topics && subcategory.topics.length > 0) {
-                    topics.push(...subcategory.topics);
-                }
-                return topics;
-            }, []);
+        // Contar el número total de temas
+        const count = await Topic.countDocuments({ _id: { $in: result.topics } });
+        result.totalPages = Math.ceil(count / limit);
 
-            result.name = category.name;
-            result.description = category.description;
-            result.subcategories = category.subcategories;
-
-            return Topic.countDocuments({ _id: { $in: result.topics } });
-        })
-        .then(count => {
-            result.totalPages = Math.ceil(count / limit);
-
-            return res.status(200).json(result);
-        })
-        .catch(err =>{
-            console.log(err)
-                res.status(400).json({ msg: 'Failed to get info of subcategory.', err })
-            }
-        );
+        return res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Failed to get info of subcategory.', err });
+    }
 });
-
 
 // todo: get all topics from a subcategory /api/subcategories/topics
 
