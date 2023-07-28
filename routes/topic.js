@@ -44,6 +44,9 @@ topicController.post('/create', passport.authenticate('jwt', {session: false}), 
                             // Actualizar la referencia al último tema y última respuesta en la subcategoría
                             existingSubcategory.lastreply = savedReply._id;
                             existingSubcategory.topics.push(savedTopic._id);
+                            savedTopic.replies.push(savedReply._id);
+                            savedTopic.lastreply = savedReply._id;
+                            savedTopic.save();
                             return existingSubcategory.save()
                                 .then(() => {
                                     // Actualizar las referencias al último tema y última respuesta en el autor del tema

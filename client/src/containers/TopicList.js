@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useSearchParams, useLocation} from "react-router-dom";
-import {Col, Skeleton, Modal, Button} from "antd";
+import {Col, Skeleton, Modal, Button, Pagination} from "antd";
 import api from "../utils/api";
-import {FormOutlined} from "@ant-design/icons";
+import {BulbOutlined, FormOutlined} from "@ant-design/icons";
 import SubCategory from "../components/SubCategory";
+import {AuthContext} from "../utils/auth";
 
 const TopicList = props => {
+    const { state } = useContext(AuthContext);
+
     const [ubication, setUbication] = useState("")
     const [contentLoading, setContentLoading] = useState(true);
     const [subcategories, setSubcategories] = useState([])
@@ -19,7 +22,7 @@ const TopicList = props => {
     const location = useLocation();
     const isSubcategory = location.state && location.state.query === 'subcat';
 
-    useEffect(() => {
+    useEffect(() => { // Initial Load
         setContentLoading(true);
         if (isSubcategory) {
             console.log("subcategory")
@@ -27,8 +30,9 @@ const TopicList = props => {
                 .then((result) => {
                     setSubcategories([])
                     setTopics(result.data.topics);
-                    setUbication(result.data.name)
+                    setUbication(result.data.name) // Just initial
                     setContentLoading(false);
+                    //todo: pagination
                 })
                 .catch((e) => {
                     Modal.error({
@@ -41,7 +45,7 @@ const TopicList = props => {
                 .then(result => {
                     setSubcategories(result.data.subcategories)
                     setTopics(result.data.topics);
-                    setUbication(result.data.name)
+                    setUbication(result.data.name) // Just initial
                     setPages({
                         currentPage: result.data.currentPage,
                         totalPages: result.data.totalPages * 10,
@@ -60,21 +64,40 @@ const TopicList = props => {
     const fetchPage = page => {
         setContentLoading(true);
 
-        api.get(`/categories/topics?id=${props.id}&page=${page}`)
-            .then(result => {
-                setTopics(result.data.topics);
-                setPages({
-                    currentPage: result.data.currentPage,
-                    totalPages: result.data.totalPages * 10,
+        if (isSubcategory) {
+            console.log("subcategory")
+            api.get(`/subcategories/topics?id=${id}&page=${page}`)
+                .then((result) => {
+                    setSubcategories([])
+                    setTopics(result.data.topics);
+                    setUbication(result.data.name)
+                    setContentLoading(false);
+                })
+                .catch((e) => {
+                    Modal.error({
+                        title: 'An error occurred',
+                        content: e.message,
+                    });
                 });
-                setContentLoading(false);
-            })
-            .catch(e => {
-                Modal.error({
-                    title: 'An error occurred',
-                    content: e.message,
+        } else {
+            api.get(`/categories/topics?id=${props.id}&page=${page}`)
+                .then(result => {
+                    setTopics(result.data.topics);
+                    setPages({
+                        currentPage: result.data.currentPage,
+                        totalPages: result.data.totalPages * 10,
+                    });
+                    setContentLoading(false);
+                })
+                .catch(e => {
+                    Modal.error({
+                        title: 'An error occurred',
+                        content: e.message,
+                    });
                 });
-            });
+        }
+
+
     };
 
 
@@ -105,18 +128,72 @@ const TopicList = props => {
                 )}
             </div>
             <div>
-                {contentLoading ? (
-                    <div>
-                        <Skeleton active />
-                        <Skeleton active />
-                        <Skeleton active />
-                    </div>
-                ) : (
-                    topics.map(topic => {
-                        return <span>{topic.title}</span>
-
-                    })
-                )}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <BulbOutlined /> Topic
+                            </th>
+                            <th>
+                                Posts
+                            </th>
+                            <th>
+                                Last update
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colSpan="3">
+                            <div>
+                                {!contentLoading && topics.length > 0 && pages.totalPages > 0 && (
+                                    <Pagination
+                                        defaultCurrent={pages.currentPage}
+                                        total={pages.totalPages}
+                                        showSizeChanger={false}
+                                        onChange={fetchPage}
+                                    />
+                                )}
+                                {state.isAuthenticated && (
+                                    <Link
+                                        to={`/newtopic?id=${id}`}
+                                    >
+                                        <Button type="primary" icon={<FormOutlined />}>
+                                            Create new topic
+                                        </Button>
+                                    </Link>
+                                )}
+                            </div>
+                        </td>
+                    </tr>
+                    {contentLoading ? (
+                        <div>
+                            <Skeleton active />
+                            <Skeleton active />
+                            <Skeleton active />
+                        </div>
+                    ) : (
+                        topics.map(topic => {
+                            return (
+                                <tr key={topic._id}>
+                                    <td>
+                                        <div>
+                                            <h3>
+                                                {topic.title}
+                                            </h3>
+                                            <p>
+                                                {topic.description}
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td>{topic.replies.length}</td>
+                                    <td> Esto está roto{/*topic.lastreply.postDate */}</td>
+                                </tr>
+                            )
+                        })
+                    )}
+                    </tbody>
+                </table>
 
                 <Link
                     to={`/newsubcat?id=${id}`}
@@ -127,14 +204,7 @@ const TopicList = props => {
                     </Button>
                 </Link>
 
-                <Link
-                    to={`/newtopic?id=${id}`}
-                    className={"NewTopic"}
-                >
-                    <Button type="primary" icon={<FormOutlined />}>
-                        Create new topic
-                    </Button>
-                </Link>
+
             </div>
         </div>
     );
