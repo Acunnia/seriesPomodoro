@@ -5,11 +5,12 @@ const app = express();
 const port = process.env.PORT || 80;
 const path = require('path');
 const passport = require('passport');
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 const controllers = require('./routes')
 const userController = require('./routes/user')
 const User = require("./models/user.model");
 const { Strategy, ExtractJwt } = require('passport-jwt');
+const {request} = require("express");
 
 // Middlewares
 app.use(express.json());
