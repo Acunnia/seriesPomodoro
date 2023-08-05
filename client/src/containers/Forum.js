@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {List, Skeleton} from 'antd';
 import api from '../utils/api';
 import Category from '../components/Category'
-import styles from './styles/Forum.styles.css';
 
 const Forum = () => {
     const [loading, setLoading] = useState(false)

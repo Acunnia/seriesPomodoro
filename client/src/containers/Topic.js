@@ -14,7 +14,8 @@ const Topic = props => {
     const id = searchParams.get("id")
 
     useEffect(() => {
-        api.get(`/topics${id}`).then(result => {
+        api.get(`/topics?id=${id}`).then(result => {
+            console.log(result)
             setTopic(result.data)
             setContentLoading(false)
         }).catch(err => {
@@ -27,7 +28,7 @@ const Topic = props => {
 
     return (
         <div>
-
+            <p>Topic</p>
         </div>
     );
 };

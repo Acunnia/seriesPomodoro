@@ -11,6 +11,7 @@ import TopicList from "./containers/TopicList";
 import {useEffect, useReducer} from "react";
 import {reducer, AuthContext} from "./utils/auth";
 import TopicForm from "./containers/TopicForm";
+import ReadCategories from "./containers/admin/readCategories";
 
 const authInitialState = {
     user: null,
@@ -53,6 +54,7 @@ function App() {
                               <Route path="/topic" element={<Topic/>} />
                               <Route path="/newcategory" element={<CategoryForm/>} />
                               <Route path="/newtopic" element={<TopicForm/>} />
+                              <Route path="/admin/cat" element={<ReadCategories/>} />
                           </Routes>
                       </Content>
                       <Footer>Footer</Footer>
