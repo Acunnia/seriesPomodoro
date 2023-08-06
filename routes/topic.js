@@ -13,9 +13,13 @@ topicController.get('/',async (req, res) => {
 
         const result = { currentPage: page };
 
-        const foundTopic = await Topic.findById(id).populate({
+        const foundTopic = await Topic.findById(id)
+            .populate({
+                path: 'author',
+                select: 'username',
+            })
+            .populate({
             path: 'replies',
-            select: '-message',
             populate: {
                 path: 'author',
                 select: 'username',
