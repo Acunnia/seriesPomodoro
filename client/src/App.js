@@ -57,7 +57,7 @@ function App() {
                               <Route path="/admin/cat" element={<ReadCategories/>} />
                           </Routes>
                       </Content>
-                      <Footer>Footer</Footer>
+                      <Footer className={"footer"}>Footer</Footer>
                   </Layout>
               </div>
           </BrowserRouter>

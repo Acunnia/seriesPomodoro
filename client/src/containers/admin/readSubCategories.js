@@ -11,7 +11,7 @@ export default function Read() {
 
     const fetchCategories = () => {
         setLoading(true)
-        api.get("/categories")
+        api.get("/subcategories")
             .then((response) => {
                 console.log(response.data)
                 setCategories(response.data.categories);
@@ -46,7 +46,7 @@ export default function Read() {
                     {subcategories.map((subcat) => {
                         return (
                             <p key={subcat}>
-                                {subcat.name}
+                                {subcat.toUpperCase()}
                             </p>
                         );
                     })}

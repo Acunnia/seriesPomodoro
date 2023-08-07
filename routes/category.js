@@ -4,19 +4,14 @@ const Category = require('../models/category.model')
 const Topic = require("../models/topic.model");
 const Subcategory = require('../models/subcategory.model');
 
-
+// [/api/categories] /
+// get all categories raw
 categoryController.get('/', (req, res) => {
-    Category.find().then(categories => {
+    Category.find().populate('subcategories').then(categories => {
         res.status(200).json({categories});
     });
 });
 
-/*
-categoryController.get('/:id', (req, res) => {
-    Category.findById(req.params.id).then(category => {
-        res.status(200).json({category});
-    }).catch(errDB => res.status(404).json({msg: "Cant find category", errDB}))
-});*/
 
 categoryController.post('/create', (req, res) => {
     const {name} = req.body
@@ -29,7 +24,7 @@ categoryController.post('/create', (req, res) => {
 })
 
 // [/api/categories] /topics
-// get all topics and subcategories from a category
+// get all topics and subcategories from a category limited by 10
 categoryController.get('/topics', async (req, res) => {
     try {
         const { page = 1, limit = 10, id = null } = req.query;
@@ -89,6 +84,5 @@ categoryController.get('/topics', async (req, res) => {
     }
 });
 
-// todo: get all topics from a subcategory /api/subcategories/topics
 
 module.exports = categoryController
