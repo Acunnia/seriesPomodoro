@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Link, useSearchParams, useLocation} from "react-router-dom";
+import {Link, useSearchParams, useLocation, useNavigate} from "react-router-dom";
 import {Col, Skeleton, Modal, Button, Pagination} from "antd";
 import api from "../utils/api";
 import {BulbOutlined, FormOutlined} from "@ant-design/icons";
@@ -7,6 +7,8 @@ import SubCategory from "../components/SubCategory";
 import {AuthContext} from "../utils/auth";
 
 const TopicList = props => {
+    const navigate = useNavigate()
+
     const { state } = useContext(AuthContext);
 
     const [ubication, setUbication] = useState("")
@@ -25,9 +27,9 @@ const TopicList = props => {
     useEffect(() => { // Initial Load
         setContentLoading(true);
         if (isSubcategory) {
-            console.log("subcategory")
             api.get(`/subcategories/topics?id=${id}`)
                 .then((result) => {
+                    console.log(result)
                     setSubcategories([])
                     setTopics(result.data.topics);
                     setUbication(result.data.name) // Just initial
@@ -99,7 +101,6 @@ const TopicList = props => {
 
 
     };
-
 
     return (
         <div>
@@ -178,16 +179,19 @@ const TopicList = props => {
                                 <tr key={topic._id}>
                                     <td>
                                         <div>
-                                            <h3>
-                                                {topic.title}
-                                            </h3>
-                                            <p>
-                                                {topic.description}
-                                            </p>
+                                            <Link to={`/topic?id=${topic._id}`}>
+                                                <h3>
+                                                    {topic.title}
+                                                </h3>
+                                                <p>
+                                                    {topic.description}
+                                                </p>
+                                            </Link>
                                         </div>
                                     </td>
                                     <td>{topic.replies.length}</td>
-                                    <td> Esto está roto{/*topic.lastreply.postDate */}</td>
+                                    <td>{`${String(new Date(topic.lastreply.postDate).getHours()).padStart(2, '0')}:${String(new Date(topic.lastreply.postDate).getMinutes()).padStart(2, '0')} ${String(new Date(topic.lastreply.postDate).getDate()).padStart(2, '0')}/${String(new Date(topic.lastreply.postDate).getMonth() + 1).padStart(2, '0')}/${new Date(topic.lastreply.postDate).getFullYear()}`}</td>
+
                                 </tr>
                             )
                         })

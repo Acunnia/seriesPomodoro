@@ -36,8 +36,6 @@ topicController.get('/',async (req, res) => {
         console.error(err);
         return res.status(500).json({ msg: 'Failed to get info of topic.', err });
     }
-
-
 })
 
 
