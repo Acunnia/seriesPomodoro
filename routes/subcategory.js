@@ -2,6 +2,7 @@ const express = require('express')
 const subcategoryController = express.Router();
 const Subcategory = require('../models/subcategory.model');
 const Topic = require("../models/topic.model");
+const Category = require("../models/category.model");
 
 
 
@@ -66,6 +67,28 @@ subcategoryController.get('/topics', async (req, res) => {
     }
 });
 
+subcategoryController.post('/create', async(req, res) => {
+    const {name, category} = req.body
 
+    try {
+        const savedCat = await Category.findById(category);
+
+        if (!savedCat) {
+            return res.status(404).json({ msg: 'Category does not exist' });
+        }
+
+        const newSubcat = new Subcategory({ name, category });
+
+        const savedSubcat = await newSubcat.save();
+
+        savedCat.subcategories.push(savedSubcat._id);
+
+        await savedCat.save();
+
+        return res.status(200).json({ subcat: savedSubcat });
+    } catch (error) {
+        return res.status(400).json({ msg: 'Failed creating subcategory.', err: error });
+    }
+})
 
 module.exports = subcategoryController

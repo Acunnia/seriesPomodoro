@@ -3,13 +3,17 @@ import {Button, Modal, Space, Table} from "antd";
 import api from "../../utils/api";
 import CategoryForm from "./categoryForm";
 import {AuthContext} from "../../utils/auth";
+import SubcategoryForm from "./subcategoryForm";
 
 export default function Read() {
     const { state } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isSubcategoryModalVisible, setIsSubcategoryModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+
 
     const [mode, setMode] = useState("create")
 
@@ -24,7 +28,6 @@ export default function Read() {
                 setCategories(response.data.categories);
             })
             .catch((error) => {
-                //TODO: Modal con error
             }).finally(() => setLoading(false));
     };
 
@@ -89,6 +92,61 @@ export default function Read() {
 
     };
 
+    // Redirect to admin topic list
+    function handleSubcategoryClick(subcat) {
+        
+    }
+
+    function handleSubcategoryModalCancel() {
+        setIsSubcategoryModalVisible(false);
+        setSelectedSubcategory(null);
+    }
+
+    const handleEditSubcategory = (subcategory) => {
+        setMode("edit")
+        setSelectedSubcategory(subcategory);
+        setIsSubcategoryModalVisible(true);
+    };
+
+    const handleCreateSubcategory = (catID) => {
+        setMode("create")
+        setSelectedSubcategory({ category:catID});
+        setIsSubcategoryModalVisible(true);
+    };
+
+    const handleDeleteSubcategory = (subcategory) => {
+        // Aquí puedes mostrar un modal de confirmación y luego eliminar la subcategoría.
+    };
+
+    const handleSubcategorySave = (subcategoryData) => {
+        setIsModalVisible(false);
+        setSelectedCategory(null);
+        if (mode === "create") {
+            api.post("/subcategories/create", {
+                name: subcategoryData.name,
+                category: subcategoryData.category
+            })
+                .then((response) => {
+                    fetchCategories();
+                })
+                .catch((error) => {
+                    console.error("Create error:", error);
+                })
+        } else {
+            console.log("Edit sub")
+            /*api.put(`/subcategories/edit/${categoryData._id}`, {
+                name: categoryData.name,
+                description: categoryData.description
+            })
+                .then((response) => {
+                    fetchCategories();
+                })
+                .catch((error) => {
+                    console.error("Create error:", error);
+                })*/
+        }
+    };
+
     const columns = [
         {
             title: 'Name',
@@ -107,13 +165,17 @@ export default function Read() {
             dataIndex: 'subcategories',
             render: (_, { subcategories }) => (
                 <>
-                    {subcategories.map((subcat) => {
-                        return (
-                            <p key={subcat}>
-                                {subcat.name}
+                    {subcategories.map((subcat) => (
+                        <div key={subcat._id}>
+                            <p>
+                                <a onClick={() => handleSubcategoryClick(subcat)}>{subcat.name}</a>
                             </p>
-                        );
-                    })}
+                            <Space>
+                                <button onClick={() => handleEditSubcategory(subcat)}>Edit</button>
+                                <button onClick={() => handleDeleteSubcategory(subcat)}>Delete</button>
+                            </Space>
+                        </div>
+                    ))}
                 </>
             ),
         },
@@ -123,11 +185,14 @@ export default function Read() {
             render: (_, cat) => (
                 <Space size="middle">
                     <button onClick={() => handleEdit(cat)}>Edit {cat.name}</button>
+                    <button onClick={() => handleCreateSubcategory(cat._id)}>Add new subcategory</button>
                     <button onClick={() => onDelete(cat._id)}>Delete</button>
                 </Space>
             ),
         },
     ];
+
+
 
     return (
         <div>
@@ -141,6 +206,15 @@ export default function Read() {
                 footer={null}
             >
                 <CategoryForm category={selectedCategory} onSave={handleSave} />
+            </Modal>
+
+            <Modal
+                title={selectedSubcategory ? 'Edit Subcategory' : 'Add Subcategory'}
+                open={isSubcategoryModalVisible}
+                onCancel={handleSubcategoryModalCancel}
+                footer={null}
+            >
+                <SubcategoryForm subcategory={selectedSubcategory} onSave={handleSubcategorySave} />
             </Modal>
         </div>
     );
