@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Space, Table} from "antd";
 import api from "../../utils/api";
 import CategoryForm from "./categoryForm";
+import {AuthContext} from "../../utils/auth";
 
 export default function Read() {
+    const { state } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const [mode, setMode] = useState("create")
 
     useEffect(() => {
         fetchCategories();
@@ -26,15 +30,27 @@ export default function Read() {
     };
 
     const onDelete = (id) => {
-        // TODO: Implementa la lógica para eliminar la categoría con el ID dado
+        //TODO: Modal de confirmacion de eliminacion
+        api.delete(`/categories/delete/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
+            },
+        }).then(r => {
+            console.log(r.data.message);
+        }).catch(error => {
+            console.error('Error al eliminar la categoría:', error);
+        });
     };
 
     const handleEdit = (category) => {
+        setMode("edit")
         setSelectedCategory(category);
         setIsModalVisible(true);
     };
 
     const handleCreate = () => {
+        setMode("create")
         setSelectedCategory(null);
         setIsModalVisible(true);
     };
@@ -45,9 +61,14 @@ export default function Read() {
     };
 
     const handleSave = (categoryData) => {
-        // TODO: Implementa la lógica para guardar los datos editados/creados en la base de datos
         setIsModalVisible(false);
         setSelectedCategory(null);
+        if (mode === "create") {
+
+        } else {
+
+        }
+
     };
 
     const columns = [

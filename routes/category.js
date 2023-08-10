@@ -84,5 +84,27 @@ categoryController.get('/topics', async (req, res) => {
     }
 });
 
+categoryController.delete('/delete/:categoryId', async (req, res) => {
+    const catId = req.params.categoryId;
+
+    try {
+        const category = await Category.findById(catId);
+
+        if (!category) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
+        }
+
+        if (category.subcategories.length > 0) {
+            return res.status(400).json({ message: 'Cannot delete: Subcategories already exists' });
+        }
+
+        await Category.deleteOne({ _id: catId });
+
+        return res.json({ message: 'Categoría eliminada exitosamente' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al eliminar la categoría', error: error.message });
+    }
+});
+
 
 module.exports = categoryController
