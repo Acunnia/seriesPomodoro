@@ -19,6 +19,9 @@ const CategoryForm = ({ category, onSave }) => {
 
     return (
         <Form form={form} onFinish={onFinish}>
+            <Form.Item label="ID" name="_id">
+                <Input disabled/>
+            </Form.Item>
             <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input the category name!' }]}>
                 <Input />
             </Form.Item>

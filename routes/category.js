@@ -14,9 +14,9 @@ categoryController.get('/', (req, res) => {
 
 
 categoryController.post('/create', (req, res) => {
-    const {name} = req.body
+    const {name, description} = req.body
 
-    const newCat = new Category({ name })
+    const newCat = new Category({ name, description })
 
     newCat.save()
         .then(savedCat => res.status(200).json({cat: savedCat}))
@@ -91,7 +91,7 @@ categoryController.delete('/delete/:categoryId', async (req, res) => {
         const category = await Category.findById(catId);
 
         if (!category) {
-            return res.status(404).json({ message: 'Categoría no encontrada' });
+            return res.status(404).json({ message: 'Caategory was not found' });
         }
 
         if (category.subcategories.length > 0) {
@@ -100,11 +100,35 @@ categoryController.delete('/delete/:categoryId', async (req, res) => {
 
         await Category.deleteOne({ _id: catId });
 
-        return res.json({ message: 'Categoría eliminada exitosamente' });
+        return res.json({ message: 'Category was deleted' });
     } catch (error) {
-        return res.status(500).json({ message: 'Error al eliminar la categoría', error: error.message });
+        return res.status(500).json({ message: 'Error trying to delete the category', error: error.message });
     }
 });
 
+categoryController.put('/edit/:categoryId', async (req, res) => {
+    const catId = req.params.categoryId;
+    const { name, description } = req.body;
+
+    try {
+        // Buscar la categoría por su ID
+        const category = await Category.findById(catId);
+
+        if (!category) {
+            return res.status(404).json({ message: 'Categoría no encontrada' });
+        }
+
+        // Actualizar los campos de la categoría
+        category.name = name;
+        category.description = description;
+
+        // Guardar la categoría actualizada
+        const updatedCategory = await category.save();
+
+        return res.json({ message: 'Categoría actualizada exitosamente', cat: updatedCategory });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al actualizar la categoría', error: error.message });
+    }
+});
 
 module.exports = categoryController

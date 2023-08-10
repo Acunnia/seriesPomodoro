@@ -21,7 +21,6 @@ export default function Read() {
         setLoading(true)
         api.get("/categories")
             .then((response) => {
-                console.log(response.data)
                 setCategories(response.data.categories);
             })
             .catch((error) => {
@@ -37,6 +36,7 @@ export default function Read() {
                 'Content-Type': 'application/json'
             },
         }).then(r => {
+            fetchCategories();
             console.log(r.data.message);
         }).catch(error => {
             console.error('Error al eliminar la categoría:', error);
@@ -64,9 +64,27 @@ export default function Read() {
         setIsModalVisible(false);
         setSelectedCategory(null);
         if (mode === "create") {
-
+            api.post("/categories/create", {
+                name: categoryData.name,
+                description: categoryData.description
+            })
+                .then((response) => {
+                    fetchCategories();
+                })
+                .catch((error) => {
+                    console.error("Create error:", error);
+                })
         } else {
-
+            api.put(`/categories/edit/${categoryData._id}`, {
+                name: categoryData.name,
+                description: categoryData.description
+            })
+                .then((response) => {
+                    fetchCategories();
+                })
+                .catch((error) => {
+                    console.error("Create error:", error);
+                })
         }
 
     };
