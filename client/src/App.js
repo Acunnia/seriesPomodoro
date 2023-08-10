@@ -20,6 +20,7 @@ const authInitialState = {
 };
 
 function App() {
+
     const [state, dispatch] = useReducer(reducer, authInitialState);
 
     useEffect(() => {

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {Space, Table} from "antd";
+import {Button, Modal, Space, Table} from "antd";
 import api from "../../utils/api";
+import CategoryForm from "./categoryForm";
 
 export default function Read() {
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([])
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -22,8 +26,29 @@ export default function Read() {
     };
 
     const onDelete = (id) => {
-        //todo: onDelete
-    }
+        // TODO: Implementa la lógica para eliminar la categoría con el ID dado
+    };
+
+    const handleEdit = (category) => {
+        setSelectedCategory(category);
+        setIsModalVisible(true);
+    };
+
+    const handleCreate = () => {
+        setSelectedCategory(null);
+        setIsModalVisible(true);
+    };
+
+    const handleModalCancel = () => {
+        setIsModalVisible(false);
+        setSelectedCategory(null);
+    };
+
+    const handleSave = (categoryData) => {
+        // TODO: Implementa la lógica para guardar los datos editados/creados en la base de datos
+        setIsModalVisible(false);
+        setSelectedCategory(null);
+    };
 
     const columns = [
         {
@@ -58,8 +83,8 @@ export default function Read() {
             key: 'action',
             render: (_, cat) => (
                 <Space size="middle">
-                    <button>Edit {cat.name}</button>
-                    <button onClick={onDelete(cat._id)}>Delete</button>
+                    <button onClick={() => handleEdit(cat)}>Edit {cat.name}</button>
+                    <button onClick={() => onDelete(cat._id)}>Delete</button>
                 </Space>
             ),
         },
@@ -67,7 +92,17 @@ export default function Read() {
 
     return (
         <div>
+            <Button type="primary" onClick={handleCreate}>Create Category</Button>
             <Table columns={columns} dataSource={categories}></Table>
+
+            <Modal
+                title={selectedCategory ? 'Edit Category' : 'Create Category'}
+                open={isModalVisible}
+                onCancel={handleModalCancel}
+                footer={null}
+            >
+                <CategoryForm category={selectedCategory} onSave={handleSave} />
+            </Modal>
         </div>
-    )
+    );
 }
