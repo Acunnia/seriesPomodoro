@@ -18,6 +18,7 @@ const TopicForm = props => {
     const { state } = useContext(AuthContext);
     const catID = searchParams.get("id")
 
+
     useEffect(() => {
         api.get(`/subcategories/info?id=${catID}`).then(result => {
             setSubcategory(result.data);

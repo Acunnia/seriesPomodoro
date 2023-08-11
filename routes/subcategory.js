@@ -7,8 +7,8 @@ const Category = require("../models/category.model");
 
 
 subcategoryController.get('/info', (req, res) => {
-    const { sid } = req.query;
-    Subcategory.findOne({ shortid: sid }, '-topics')
+    const { id } = req.query;
+    Subcategory.findById(id , '-topics')
         .then(subcategory => {
             return res.status(200).json(subcategory);
         })
@@ -20,13 +20,10 @@ subcategoryController.get('/info', (req, res) => {
 subcategoryController.get('/topics', async (req, res) => {
     try {
         const { page = 1, limit = 10, id = null } = req.query;
-        // Validar que id exista
         if (!id) {
             return res.status(400).json({ msg: 'No id provided.' });
         }
         const result = { currentPage: page };
-
-        // Buscar la subcategoría por su ID y poblar temas relacionados
         const subcategory = await Subcategory.findById(id)
             .populate({
                 path: 'topics',
