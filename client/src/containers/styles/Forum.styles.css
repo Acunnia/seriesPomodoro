@@ -16,3 +16,7 @@
     column-gap: 1em;
     padding: 1em 0px;
 }
+
+.hoverable-table tbody tr:hover {
+    cursor: pointer;
+}
