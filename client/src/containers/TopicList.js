@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Link, useSearchParams, useLocation, useNavigate} from "react-router-dom";
 import {Skeleton, Modal, Button, Pagination, Table, Typography } from "antd";
 import api from "../utils/api";
-import {BulbOutlined, FormOutlined} from "@ant-design/icons";
+import {FormOutlined} from "@ant-design/icons";
 import SubCategory from "../components/SubCategory";
 import {AuthContext} from "../utils/auth";
 import './styles/Forum.styles.css'
@@ -140,10 +140,6 @@ const TopicList = props => {
         },
     ];
 
-    function rowClick() {
-        console.log("awdas")
-    }
-
     return (
         <div>
             {contentLoading ? (
@@ -171,6 +167,14 @@ const TopicList = props => {
                 )}
             </div>
             <div>
+                <Link
+                    to={`/newtopic?id=${id}`}
+                    className={"NewTopic"}
+                >
+                    <Button type="primary" icon={<FormOutlined />}>
+                        Create new topic
+                    </Button>
+                </Link>
                 <Table
                     columns={columns}
                     dataSource={topics}

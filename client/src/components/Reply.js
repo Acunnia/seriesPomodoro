@@ -14,23 +14,31 @@ const Reply = ({ postData }) => {
     const { state } = useContext(AuthContext);
 
     useEffect(() => {
-        setLiked(likedBy.includes(state.user.id));
+        console.log(state)
+        if (state) {
+            setLiked(likedBy.includes(state.user.id));
+        }
     }, [likedBy]);
 
     function handleLikeClick() {
-        try {
-            const response = api.post(`/reply/like?id=${_id}`);
-            if (response.status === 200) {
-                if (!liked) {
-                    setLikes(likes + 1);
-                } else {
-                    setLikes(likes - 1);
+         api.post('/reply/like', { id: _id }, {
+                headers: {
+                    'Authorization': `Bearer ${state.token}`,
+                    'Content-Type': 'application/json'
                 }
-                setLiked(!liked);
-            }
-        } catch (error) {
+            }).then(response => {
+             if (response.status === 200) {
+                 if (!liked) {
+                     setLikes(likes + 1);
+                 } else {
+                     setLikes(likes - 1);
+                 }
+                 setLiked(!liked);
+             }
+         }).catch(error => {
+             //TODO Modal error o logout
             console.error('Error liking reply:', error);
-        }
+        })
     }
 
     return (

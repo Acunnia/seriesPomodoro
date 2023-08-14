@@ -26,6 +26,7 @@ app.use('/api/users', controllers.userController);
 app.use('/api/categories', controllers.categoryController);
 app.use('/api/subcategories', controllers.subcategoryController);
 app.use('/api/topics', controllers.topicController);
+app.use('/api/reply', controllers.replyController);
 
 
 // If no API routes

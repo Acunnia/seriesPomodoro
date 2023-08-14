@@ -4,6 +4,7 @@ import {useSearchParams} from "react-router-dom";
 import api from "../utils/api";
 import Meta from "antd/es/card/Meta";
 import Reply from "../components/Reply";
+import CommentForm from "../components/commentForm";
 
 // antd
 const { Title, Text } = Typography;
@@ -54,19 +55,10 @@ const Topic = props => {
                                 </div>
                             ))
                         ) : (
-                            <p>No replies yet.</p>
+                            <p>No replies yet. Be the first</p>
                         )}
 
-                        <Form onFinish={handleNewReply}>
-                            <Form.Item label="Nueva Respuesta">
-                                <Input.TextArea rows={4} name="newReply" />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Enviar Respuesta
-                                </Button>
-                            </Form.Item>
-                        </Form>
+                    <CommentForm />
 
                 </>
             )}
