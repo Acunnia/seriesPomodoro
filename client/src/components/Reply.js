@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { Card, Avatar, Row, Col, Typography, Space } from 'antd';
-import { LikeOutlined } from '@ant-design/icons';
+import {HeartTwoTone, LikeOutlined} from '@ant-design/icons';
 import api from "../utils/api";
 import {AuthContext} from "../utils/auth";
 
@@ -55,11 +55,11 @@ const Reply = ({ postData }) => {
                 <Col span={6}>
                     <Space direction="vertical" align="end">
                         <div>
-                            <LikeOutlined
+                            <HeartTwoTone
+                                twoToneColor={liked ? "#eb2f96" : "#151515"}
                                 onClick={handleLikeClick}
                                 style={{
                                     cursor: 'pointer',
-                                    color: liked ? 'blue' : 'black'
                                 }}
                             />{' '}
                             {likes} Likes

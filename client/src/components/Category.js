@@ -1,6 +1,8 @@
 import React from 'react';
 import "./styles/Category.styles.css"
 import { useNavigate } from 'react-router-dom';
+import {createFromIconfontCN} from "@ant-design/icons";
+import {Col, Row} from "antd";
 
 const Category = props => { //TODO: se puede hacer refactor para mergear Category y subcategory
     const navigate = useNavigate();
@@ -13,6 +15,10 @@ const Category = props => { //TODO: se puede hacer refactor para mergear Categor
             },
         });
     }
+
+    const IconFont = createFromIconfontCN({
+        scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
+    });
 
     return (
         <div onClick={goToCategory} className="category-box">

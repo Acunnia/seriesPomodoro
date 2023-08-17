@@ -36,7 +36,7 @@ html {
   font-family: Metropolis;
   font-size: var(--base-font-size);
   line-height: var(--line-height-large);
-  background-color: var(--secondary);
+  background-color: var(--bg-primary);
   overflow-y: scroll;
   direction: ltr;
 }
@@ -106,6 +106,7 @@ html {
 }
 
 .footer{
+  background-color: var(--secundary);
   position:absolute;
   left:0;
   bottom:0;
