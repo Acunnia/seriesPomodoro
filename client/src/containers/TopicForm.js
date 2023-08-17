@@ -34,8 +34,6 @@ const TopicForm = props => {
             subcategory: subcategory._id,
         };
 
-        console.log(topicData)
-
         api.post('/topics/create', topicData, {
             headers: {
                 'Authorization': `Bearer ${state.token}`,

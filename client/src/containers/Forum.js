@@ -16,6 +16,7 @@ const Forum = () => {
         setLoading(true)
         api.get("/categories")
             .then((response) => {
+                console.log(response.data)
                 setCategories(response.data.categories);
             })
             .catch((error) => {

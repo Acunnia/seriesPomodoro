@@ -24,7 +24,7 @@ const Category = props => { //TODO: se puede hacer refactor para mergear Categor
             </div>
             <div className="subcategory-list">
                 {props.data.subcategories.map(subcategory => (
-                    <div className="subcategory" key={subcategory.id}>
+                    <div className="subcategory" key={subcategory._id}>
                         {subcategory.name}
                     </div>
                 ))}

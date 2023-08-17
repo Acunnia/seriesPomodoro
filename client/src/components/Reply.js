@@ -14,8 +14,7 @@ const Reply = ({ postData }) => {
     const { state } = useContext(AuthContext);
 
     useEffect(() => {
-        console.log(state)
-        if (state) {
+        if (state.user) {
             setLiked(likedBy.includes(state.user.id));
         }
     }, [likedBy]);

@@ -12,6 +12,7 @@ import {useEffect, useReducer} from "react";
 import {reducer, AuthContext} from "./utils/auth";
 import TopicForm from "./containers/TopicForm";
 import ReadCategories from "./containers/admin/readCategories";
+import {ConfigProvider, theme} from "antd";
 
 const authInitialState = {
     user: null,
@@ -21,7 +22,7 @@ const authInitialState = {
 
 function App() {
 
-    const [state, dispatch] = useReducer(reducer, authInitialState);
+    const [state, dispatch ] = useReducer(reducer, authInitialState);
 
     useEffect(() => {
         if (localStorage.getItem('token') && localStorage.getItem('user')) {
@@ -38,31 +39,41 @@ function App() {
     }, []);
 
   return (
-      <AuthContext.Provider value={{ state, dispatch }}>
-          <BrowserRouter>
-              <div>
-                  <Layout className={"main"}>
-                      <div className={"header-wrap"}>
-                          <AppHeader/>
-                      </div>
-                      <Content className={"mainWrapper"}>
-                          <span> Info del sistema </span>
-                          <Routes>
-                              <Route path="/" exact element={<Forum/>} />
-                              <Route path="/login"  element={<Login/>} />
-                              <Route path="/register" element={<RegistrationForm/>} />
-                              <Route path="/category" element={<TopicList/>} />
-                              <Route path="/topic" element={<Topic/>} />
-                              <Route path="/newcategory" element={<CategoryForm/>} />
-                              <Route path="/newtopic" element={<TopicForm/>} />
-                              <Route path="/admin/cat" element={<ReadCategories/>} />
-                          </Routes>
-                      </Content>
-                      <Footer className={"footer"}>Footer</Footer>
-                  </Layout>
-              </div>
-          </BrowserRouter>
-      </AuthContext.Provider>
+      <ConfigProvider
+          theme={{
+              // 1. Use dark algorithm
+              algorithm: theme.darkAlgorithm,
+
+              // 2. Combine dark algorithm and compact algorithm
+              // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
+          }}
+      >
+          <AuthContext.Provider value={{ state, dispatch }}>
+              <BrowserRouter>
+                  <div>
+                      <Layout className={"main"}>
+                          <div className={"header-wrap"}>
+                              <AppHeader/>
+                          </div>
+                          <Content className={"mainWrapper"}>
+                              <span> Info del sistema </span>
+                              <Routes>
+                                  <Route path="/" exact element={<Forum/>} />
+                                  <Route path="/login"  element={<Login/>} />
+                                  <Route path="/register" element={<RegistrationForm/>} />
+                                  <Route path="/category" element={<TopicList/>} />
+                                  <Route path="/topic" element={<Topic/>} />
+                                  <Route path="/newcategory" element={<CategoryForm/>} />
+                                  <Route path="/newtopic" element={<TopicForm/>} />
+                                  <Route path="/admin/cat" element={<ReadCategories/>} />
+                              </Routes>
+                          </Content>
+                          <Footer className={"footer"}>Footer</Footer>
+                      </Layout>
+                  </div>
+              </BrowserRouter>
+          </AuthContext.Provider>
+      </ConfigProvider>
   );
 }
 
