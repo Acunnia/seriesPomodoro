@@ -14,9 +14,9 @@ categoryController.get('/', (req, res) => {
 
 
 categoryController.post('/create', (req, res) => {
-    const {name, description} = req.body
+    const {name, description, image} = req.body
 
-    const newCat = new Category({ name, description })
+    const newCat = new Category({ name, description, image })
 
     newCat.save()
         .then(savedCat => res.status(200).json({cat: savedCat}))
@@ -108,7 +108,7 @@ categoryController.delete('/delete/:categoryId', async (req, res) => {
 
 categoryController.put('/edit/:categoryId', async (req, res) => {
     const catId = req.params.categoryId;
-    const { name, description } = req.body;
+    const { name, description, image } = req.body;
 
     try {
         // Buscar la categoría por su ID
@@ -121,6 +121,7 @@ categoryController.put('/edit/:categoryId', async (req, res) => {
         // Actualizar los campos de la categoría
         category.name = name;
         category.description = description;
+        category.image = image;
 
         // Guardar la categoría actualizada
         const updatedCategory = await category.save();

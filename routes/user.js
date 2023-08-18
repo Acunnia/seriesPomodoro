@@ -50,7 +50,7 @@ userController.post('/register', (req, res) => {
 
 userController.post('/login', (req,res) => {
     const { email, password } = req.body;
-    User.findOne({ email }, '+password').then(user => {
+    User.findOne({ email }, '+password').populate("role", "admin_level name").then(user => {
         if (!user) {
             return res.status(404).json({ msg: 'This user does not exists.' });
         }
@@ -60,6 +60,7 @@ userController.post('/login', (req,res) => {
                 const payload = {
                     id: user._id,
                     username: user.username,
+                    admin_level: user.role.admin_level,
                 };
 
                 jwt.sign(payload, secret, { expiresIn: 36000 }, (err, token) => {
@@ -74,6 +75,10 @@ userController.post('/login', (req,res) => {
                             id: user._id,
                             username: user.username,
                             email: user.email,
+                            role: {
+                                name: user.role.name,
+                                admin_level: user.role.admin_level
+                            }
                         },
                     });
                 });

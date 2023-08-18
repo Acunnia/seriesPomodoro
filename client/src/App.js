@@ -19,6 +19,8 @@ const authInitialState = {
     user: null,
     token: null,
     isAuthenticated: false,
+    isTokenExpired: false,
+    admin_level: 0
 };
 
 function App() {

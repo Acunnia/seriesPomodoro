@@ -69,7 +69,8 @@ export default function Read() {
         if (mode === "create") {
             api.post("/categories/create", {
                 name: categoryData.name,
-                description: categoryData.description
+                description: categoryData.description,
+                image: categoryData.image
             })
                 .then((response) => {
                     fetchCategories();
@@ -80,7 +81,8 @@ export default function Read() {
         } else {
             api.put(`/categories/edit/${categoryData._id}`, {
                 name: categoryData.name,
-                description: categoryData.description
+                description: categoryData.description,
+                image: categoryData.image
             })
                 .then((response) => {
                     fetchCategories();

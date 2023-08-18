@@ -35,14 +35,17 @@ const AppHeader = () => {
         <Header className="header">
             <div className={"header-container"}>
                 <div className="logo">series Pomodoro</div>
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} className={"menu"}>
+                <Menu style={{justifyContent: "flex-end"}} mode="horizontal" defaultSelectedKeys={['1']} className={"menu"}>
                     <Menu.Item key="1" icon={<AppstoreOutlined />}>
                         <NavLink to="/">Boards</NavLink>
                     </Menu.Item>
                     {state.isAuthenticated && (
-                        <Menu.Item icon={<LogoutOutlined />} onClick={logout}>
-                            Logout
-                        </Menu.Item>
+                        <div style={{display: "flex"}}>
+                            <p style={{marginBlockStart: 0, marginBlockEnd: 0}}>Welcome: {state.user.username}</p>
+                            <Menu.Item icon={<LogoutOutlined />} onClick={logout}>
+                                Logout
+                            </Menu.Item>
+                        </div>
                     )}
                     {!state.isAuthenticated && (
                         <Menu.Item key="/login" icon={<LoginOutlined />}>

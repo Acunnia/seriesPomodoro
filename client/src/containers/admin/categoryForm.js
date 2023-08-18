@@ -28,6 +28,9 @@ const CategoryForm = ({ category, onSave }) => {
             <Form.Item label="Description" name="description">
                 <Input />
             </Form.Item>
+            <Form.Item label="Image" name="image">
+                <Input />
+            </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">
                     {isEditing ? 'Update' : 'Create'}

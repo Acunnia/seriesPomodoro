@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./styles/Category.styles.css"
 import { useNavigate } from 'react-router-dom';
-import {createFromIconfontCN} from "@ant-design/icons";
-import {Col, Row} from "antd";
 
 const Category = props => { //TODO: se puede hacer refactor para mergear Category y subcategory
     const navigate = useNavigate();
+    const [isHovered, setIsHovered] = useState(false);
+
     const goToCategory = () => {
         navigate(`/category?id=${props.data._id}`, {
             state: {
@@ -16,12 +16,36 @@ const Category = props => { //TODO: se puede hacer refactor para mergear Categor
         });
     }
 
-    const IconFont = createFromIconfontCN({
-        scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
-    });
+    const categoryStyle = {
+        backgroundImage: `linear-gradient(to right, rgba(20,20,20,0.9) 30%, 80%, transparent), url(${props.data.image})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+        position: 'relative',
+    };
+
+    const hoverStyle = {
+        content: '',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        pointerEvents: 'none',
+        opacity: isHovered ? 1 : 0,
+        transition: 'opacity 0.3s',
+    };
 
     return (
-        <div onClick={goToCategory} className="category-box">
+        <div
+            onClick={goToCategory}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="category-box"
+            style={categoryStyle}
+        >
+            <div style={hoverStyle}></div>
             <div className="category-name">
                 {props.data.name}
             </div>
