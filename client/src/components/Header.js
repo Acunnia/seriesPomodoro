@@ -34,7 +34,7 @@ const AppHeader = () => {
     return (
         <Header className="header">
             <div className={"header-container"}>
-                <div className="logo" />
+                <div className="logo">series Pomodoro</div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} className={"menu"}>
                     <Menu.Item key="1" icon={<AppstoreOutlined />}>
                         <NavLink to="/">Boards</NavLink>
