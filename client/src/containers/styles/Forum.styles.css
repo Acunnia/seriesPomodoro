@@ -4,8 +4,6 @@
     background-color: var(--bg-primary);
 }
 
-
-
 .category-container{
     grid-template-columns: 1fr 1fr;
     justify-items: center;

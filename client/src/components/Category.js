@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import "./styles/Category.styles.css"
 import { useNavigate } from 'react-router-dom';
 
-const Category = props => { //TODO: se puede hacer refactor para mergear Category y subcategory
+const Category = props => {
     const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -22,6 +22,7 @@ const Category = props => { //TODO: se puede hacer refactor para mergear Categor
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
         position: 'relative',
+
     };
 
     const hoverStyle = {

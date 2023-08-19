@@ -24,6 +24,10 @@
 
 .header-wrap{
   background-color: var(--bg-header) !important;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom: 1px solid rgba(253, 253, 253, 0.12);
+  border-left-width: 0;
 }
 
 .wrap {
@@ -70,15 +74,15 @@ html {
 .header {
   width: 100%;
   padding: 0 24px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: var(--d-max-width);
 }
 
 .header-container{
   height: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  align-items: center;
   display: flex;
-  max-width: var(--d-max-width);
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -88,8 +92,6 @@ html {
   color: #c2c2c2;
   height: 31px;
 }
-
-
 
 .mainWrapper{
   box-sizing: border-box;

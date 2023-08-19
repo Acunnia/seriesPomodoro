@@ -13,7 +13,6 @@ import {reducer, AuthContext} from "./utils/auth";
 import TopicForm from "./containers/TopicForm";
 import ReadCategories from "./containers/admin/readCategories";
 import {ConfigProvider, theme} from "antd";
-import {createFromIconfontCN} from "@ant-design/icons";
 
 const authInitialState = {
     user: null,
