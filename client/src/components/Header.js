@@ -1,12 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Layout, Menu} from 'antd';
 import {
-    AppstoreOutlined, DiffFilled, DownOutlined,
+    AppstoreOutlined,
     LoginOutlined,
     LogoutOutlined,
-    MailOutlined,
-    SettingOutlined,
-    UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
 import './styles/Header.styles.css'
 import {NavLink, useNavigate} from "react-router-dom";
@@ -53,9 +50,6 @@ const AppHeader = () => {
             onClick: () => navigate("/register"),
         },
     ]
-
-
-
 
     const logedItems = [
         {

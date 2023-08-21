@@ -34,7 +34,7 @@ const Topic = props => {
                 content: err.message,
             })
         })
-    }, [id])
+    }, [id, state])
 
     function handleNewReply(commentData) {
         console.log(commentData)

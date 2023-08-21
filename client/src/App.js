@@ -1,24 +1,24 @@
 import './App.css';
+import {useEffect, useReducer} from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {ConfigProvider, theme, notification} from "antd";
+import Layout, {Content, Footer} from "antd/es/layout/layout";
+import {reducer, AuthContext} from "./utils/auth";
 import RegistrationForm from "./containers/RegistrationForm";
 import CategoryForm from "./containers/CategoryCreate";
 import Forum from "./containers/Forum";
 import Login from "./containers/Login"
 import Topic from "./containers/Topic"
-import Layout, {Content, Footer} from "antd/es/layout/layout";
 import AppHeader from "./components/Header";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TopicList from "./containers/TopicList";
-import {useEffect, useReducer} from "react";
-import {reducer, AuthContext} from "./utils/auth";
 import TopicForm from "./containers/TopicForm";
 import ReadCategories from "./containers/admin/readCategories";
-import {ConfigProvider, theme} from "antd";
+import jwt_decode from "jwt-decode";
 
 const authInitialState = {
     user: null,
     token: null,
     isAuthenticated: false,
-    isTokenExpired: false,
     admin_level: 0
 };
 
@@ -30,15 +30,33 @@ function App() {
         if (localStorage.getItem('token') && localStorage.getItem('user')) {
             const token = JSON.parse(localStorage.getItem('token'));
             const user = JSON.parse(localStorage.getItem('user'));
-            dispatch({
-                type: 'LOGIN',
-                payload: {
-                    user,
-                    token,
-                },
-            });
+            const decodedToken = jwt_decode(token);
+            const tokenExpirationTimestamp = decodedToken.exp * 1000;
+            const currentTime = Date.now();
+            const isSavedTokenExpired = tokenExpirationTimestamp < currentTime;
+
+            if (isSavedTokenExpired) {
+                showNotification('Your session has expired', 'You need to log in again', 'topRight');
+                dispatch({ type: 'LOGOUT' });
+            } else {
+                dispatch({
+                    type: 'LOGIN',
+                    payload: {
+                        user,
+                        token,
+                    },
+                });
+            }
         }
     }, []);
+
+    const showNotification = (message, desc, place) => {
+        notification.info({
+            message: message,
+            description: desc,
+            placement: place,
+        });
+    };
 
   return (
       <ConfigProvider
