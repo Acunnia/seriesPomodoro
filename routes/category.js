@@ -29,7 +29,6 @@ categoryController.get('/topics', async (req, res) => {
     try {
         const { page = 1, limit = 10, id = null } = req.query;
 
-        // Validar que id exista
         if (!id) {
             return res.status(400).json({ msg: 'No id provided.' });
         }
@@ -111,19 +110,15 @@ categoryController.put('/edit/:categoryId', async (req, res) => {
     const { name, description, image } = req.body;
 
     try {
-        // Buscar la categoría por su ID
         const category = await Category.findById(catId);
 
         if (!category) {
             return res.status(404).json({ message: 'Categoría no encontrada' });
         }
-
-        // Actualizar los campos de la categoría
         category.name = name;
         category.description = description;
         category.image = image;
 
-        // Guardar la categoría actualizada
         const updatedCategory = await category.save();
 
         return res.json({ message: 'Categoría actualizada exitosamente', cat: updatedCategory });

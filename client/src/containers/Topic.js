@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {Row, Col, Typography, Form, Input, Button, Modal, Spin, Card, Avatar, Divider} from 'antd';
+import {Card, Divider, Input, message, Modal, Typography} from "antd";
+import {useContext, useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
+import {AuthContext} from "../utils/auth";
 import api from "../utils/api";
 import Meta from "antd/es/card/Meta";
 import Reply from "../components/Reply";
 import CommentForm from "../components/commentForm";
-import {AuthContext} from "../utils/auth";
 
-// antd
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 const Topic = props => {
-    const [contentLoading, setContentLoading] = useState(true);
+    const [ contentLoading, setContentLoading ] = useState(true);
     const [ userLogued, setUserLogued ] = useState(false)
-    const [topic, setTopic] = useState({})
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [ topic, setTopic ] = useState(null)
+    const [ searchParams, setSearchParams ] = useSearchParams();
     const id = searchParams.get("id")
     const { state } = useContext(AuthContext);
 
@@ -24,6 +23,13 @@ const Topic = props => {
             setUserLogued(state)
         }
 
+        if (!topic){
+            fetchTopic()
+        }
+
+    }, [id, state])
+
+    function fetchTopic() {
         api.get(`/topics?id=${id}`).then(result => {
             console.log(result)
             setTopic(result.data.topic)
@@ -34,10 +40,20 @@ const Topic = props => {
                 content: err.message,
             })
         })
-    }, [id, state])
+    }
 
     function handleNewReply(commentData) {
         console.log(commentData)
+            api.post('/reply/add', {message: commentData.comment, topicId:id }, {
+                headers: {
+                    'Authorization': `Bearer ${state.token}`,
+                    'Content-Type': 'application/json'
+                }}).then(result => {
+                    message.success("Posted!")
+                    fetchTopic()
+                }).catch(err => {
+                    message.error('Something went wrong');
+                })
     }
 
     return (

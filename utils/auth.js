@@ -13,7 +13,6 @@ const jwtOptions  = {
 
 module.exports = passport => {
     passport.use(new Strategy(jwtOptions, (jwt_payload, done) => {
-        console.log("Passport")
         User.findById(jwt_payload.id).populate('role').then(user => {
             if (user) {
                 return done(null, {

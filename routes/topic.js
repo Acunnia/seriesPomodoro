@@ -29,7 +29,6 @@ topicController.get('/',async (req, res) => {
         if (!foundTopic) {
             return res.status(404).json({ msg: 'Topic not found.' });
         }
-        console.log("solicita id", id)
         result.topic = foundTopic
         return res.status(200).json(result);
     } catch (err) {
@@ -42,14 +41,12 @@ topicController.get('/',async (req, res) => {
 topicController.post('/create', passport.authenticate('jwt', {session: false}), (req, res) => {
     const { title, message, author, subcategory, description } = req.body;
 
-    // Verificar si la subcategoría existe
     Subcategory.findById(subcategory)
         .then(existingSubcategory => {
             if (!existingSubcategory) {
                 return res.status(404).json({ error: 'La subcategoría no existe' });
             }
 
-            // Crear un nuevo tema
             const newTopic = new Topic({
                 title,
                 description,
@@ -57,7 +54,6 @@ topicController.post('/create', passport.authenticate('jwt', {session: false}), 
                 author,
             });
 
-            // Guardar el tema en la base de datos
             return newTopic.save()
                 .then(savedTopic => {
                     // Crear una nueva respuesta para el tema

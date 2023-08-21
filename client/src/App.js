@@ -1,7 +1,7 @@
 import './App.css';
 import {useEffect, useReducer} from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {ConfigProvider, theme, notification} from "antd";
+import {ConfigProvider, theme, notification, message} from "antd";
 import Layout, {Content, Footer} from "antd/es/layout/layout";
 import {reducer, AuthContext} from "./utils/auth";
 import RegistrationForm from "./containers/RegistrationForm";
@@ -58,6 +58,10 @@ function App() {
         });
     };
 
+    const showMessage = (text) => {
+        message.success(text);
+    };
+
   return (
       <ConfigProvider
           theme={{
@@ -71,7 +75,7 @@ function App() {
           <AuthContext.Provider value={{ state, dispatch }}>
               <BrowserRouter>
                   <div>
-                      <Layout className={"main"}>
+                      <Layout style={{ minHeight: "100vh" }} className={"main"}>
                           <div className={"header-wrap"}>
                               <AppHeader/>
                           </div>

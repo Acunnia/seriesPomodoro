@@ -15,10 +15,6 @@
 }
 
 .App {
-  position: relative;
-  text-align: left;
-  direction: ltr;
-  display: block;
   background-color: var(--bg-primary);
 }
 
@@ -43,8 +39,6 @@ html {
   font-size: var(--base-font-size);
   line-height: var(--line-height-large);
   background-color: var(--bg-primary);
-  overflow-y: scroll;
-  direction: ltr;
 }
 
 .content{
@@ -110,7 +104,6 @@ html {
 
 .footer{
   background-color: var(--secundary);
-  position:absolute;
   left:0;
   bottom:0;
   right:0;
