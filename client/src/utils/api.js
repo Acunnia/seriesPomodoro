@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const config = {
-    baseURL: `http://localhost:4000/api/`,
+    baseURL: `http://192.168.1.126:4000/api/`,
     responseType: 'json',
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
