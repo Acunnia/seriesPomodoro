@@ -1,6 +1,6 @@
 import './App.css';
 import {useEffect, useReducer} from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import {ConfigProvider, theme, notification, message} from "antd";
 import Layout, {Content, Footer} from "antd/es/layout/layout";
 import {reducer, AuthContext} from "./utils/auth";
@@ -23,19 +23,22 @@ const authInitialState = {
 };
 
 function App() {
+    const ConditionalRoute = ({ path, element, admin_level }) => {
+        if (state.admin_level===admin_level) {
+          return <Route path={path} element={element} />;
+        } else {
+          return <Navigate to="/login" />;
+        }
+      };
 
     const [state, dispatch ] = useReducer(reducer, authInitialState);
 
     useEffect(() => {
+        console.log(state);
         if (localStorage.getItem('token') && localStorage.getItem('user')) {
             const token = JSON.parse(localStorage.getItem('token'));
             const user = JSON.parse(localStorage.getItem('user'));
-            const decodedToken = jwt_decode(token);
-            const tokenExpirationTimestamp = decodedToken.exp * 1000;
-            const currentTime = Date.now();
-            const isSavedTokenExpired = tokenExpirationTimestamp < currentTime;
-
-            if (isSavedTokenExpired) {
+            if (isTokenExpired(token)) {
                 showNotification('Your session has expired', 'You need to log in again', 'topRight');
                 dispatch({ type: 'LOGOUT' });
             } else {
@@ -49,6 +52,19 @@ function App() {
             }
         }
     }, []);
+
+
+
+    const isTokenExpired = (token) => {
+        try {
+            const decodedToken = jwt_decode(token);
+            const tokenExpirationTimestamp = decodedToken.exp * 1000;
+            const currentTime = Date.now();
+            return tokenExpirationTimestamp < currentTime;
+        } catch (error) {
+            return false;
+        }
+    };
 
     const showNotification = (message, desc, place) => {
         notification.info({
@@ -65,11 +81,7 @@ function App() {
   return (
       <ConfigProvider
           theme={{
-              // 1. Use dark algorithm
               algorithm: theme.darkAlgorithm,
-
-              // 2. Combine dark algorithm and compact algorithm
-              // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
           }}
       >
           <AuthContext.Provider value={{ state, dispatch }}>
@@ -89,7 +101,9 @@ function App() {
                                   <Route path="/topic" element={<Topic/>} />
                                   <Route path="/newcategory" element={<CategoryForm/>} />
                                   <Route path="/newtopic" element={<TopicForm/>} />
-                                  <Route path="/admin/cat" element={<ReadCategories/>} />
+                                  <Route path="/admin/cat" 
+                                         element={<ConditionalRoute path="/" element={<ReadCategories />} admin_level={4}/>}
+  />
                               </Routes>
                           </Content>
                           <Footer className={"footer"} style={{

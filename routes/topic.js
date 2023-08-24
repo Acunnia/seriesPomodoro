@@ -37,7 +37,6 @@ topicController.get('/',async (req, res) => {
     }
 })
 
-
 topicController.post('/create', passport.authenticate('jwt', {session: false}), (req, res) => {
     const { title, message, author, subcategory, description } = req.body;
 
