@@ -8,19 +8,19 @@ const Subcategory = require('../models/subcategory.model');
 // get all categories raw
 categoryController.get('/', (req, res) => {
     Category.find().populate('subcategories').then(categories => {
-        res.status(200).json({categories});
+        res.status(200).json({ categories });
     });
 });
 
 
 categoryController.post('/create', (req, res) => {
-    const {name, description, image} = req.body
+    const { name, description, image } = req.body
 
     const newCat = new Category({ name, description, image })
 
     newCat.save()
-        .then(savedCat => res.status(200).json({cat: savedCat}))
-        .catch(saveErr => res.status(400).json({msg:'Failed creating category.', err: saveErr}))
+        .then(savedCat => res.status(200).json({ cat: savedCat }))
+        .catch(saveErr => res.status(400).json({ msg: 'Failed creating category.', err: saveErr }))
 })
 
 // [/api/categories] /topics

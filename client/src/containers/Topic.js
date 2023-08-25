@@ -31,7 +31,6 @@ const Topic = props => {
 
     function fetchTopic() {
         api.get(`/topics?id=${id}`).then(result => {
-            console.log(result)
             setTopic(result.data.topic)
             setContentLoading(false)
         }).catch(err => {
@@ -43,7 +42,6 @@ const Topic = props => {
     }
 
     function handleNewReply(commentData) {
-        console.log(commentData)
             api.post('/reply/add', {message: commentData.comment, topicId:id }, {
                 headers: {
                     'Authorization': `Bearer ${state.token}`,

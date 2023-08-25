@@ -26,7 +26,6 @@ function App() {
     const [state, dispatch] = useReducer(reducer, authInitialState);
 
     useEffect(() => {
-        console.log(state);
         if (localStorage.getItem('token') && localStorage.getItem('user')) {
             const token = JSON.parse(localStorage.getItem('token'));
             const user = JSON.parse(localStorage.getItem('user'));
@@ -95,13 +94,13 @@ function App() {
                                     <Route path="/newtopic" element={<TopicForm />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
                                         <Route path="/admin/cat" element={<ReadCategories />} />
-                                    ) : null}
+                                    ) : null///TODO: añadir 404
+                                }
                                 </Routes>
                             </Content>
                             <Footer className={"footer"} style={{
                                 textAlign: 'center',
                             }}>Series Pomodoro ©2023
-
                             </Footer>
                         </Layout>
                     </div>

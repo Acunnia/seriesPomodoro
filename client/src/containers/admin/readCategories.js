@@ -40,8 +40,7 @@ export default function Read() {
             },
         }).then(r => {
             fetchCategories();
-            console.log(r.data.message);
-        }).catch(error => {
+        }).catch(error => {// ToDo: Mensaje de error
             console.error('Error al eliminar la categoría:', error);
         });
     };
@@ -134,7 +133,7 @@ export default function Read() {
                 .catch((error) => {
                     console.error("Create error:", error);
                 })
-        } else {
+        } else {//TODO: Editar la subcategoría
             console.log("Edit sub")
             /*api.put(`/subcategories/edit/${categoryData._id}`, {
                 name: categoryData.name,

@@ -17,8 +17,6 @@ const AppHeader = () => {
     const navigate = useNavigate();
     const [uuusername, setUuusername] = useState("")
 
-    console.log(state.user)
-
     const logout = () => {
         Modal.confirm({
             title: 'Logout?',

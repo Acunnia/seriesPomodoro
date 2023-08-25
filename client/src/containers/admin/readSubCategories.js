@@ -13,7 +13,6 @@ export default function Read() {
         setLoading(true)
         api.get("/subcategories")
             .then((response) => {
-                console.log(response.data)
                 setCategories(response.data.categories);
             })
             .catch((error) => {

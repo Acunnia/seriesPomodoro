@@ -12,7 +12,7 @@ const RegistrationForm = () => {
                 email: values.email,
                 password: values.password,
             })
-            .then((response) => {
+            .then((response) => {//ToDO: Mensjaes de respuesta
                 console.log("Registro exitoso:", response.data);
             })
             .catch((error) => {
