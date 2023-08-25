@@ -3,6 +3,7 @@ const categoryController = express.Router();
 const Category = require('../models/category.model')
 const Topic = require("../models/topic.model");
 const Subcategory = require('../models/subcategory.model');
+const passport = require('passport');
 
 // [/api/categories] /
 // get all categories raw
@@ -13,7 +14,10 @@ categoryController.get('/', (req, res) => {
 });
 
 
-categoryController.post('/create', (req, res) => {
+categoryController.post('/create', passport.authenticate('jwt', {session: false}) , (req, res) => {
+    if (req.user.admin_level > 3 ) {
+        return res.status(403).json({ msg: 'You do not have permission to perform' });
+    }
     const { name, description, image } = req.body
 
     const newCat = new Category({ name, description, image })
@@ -83,7 +87,11 @@ categoryController.get('/topics', async (req, res) => {
     }
 });
 
-categoryController.delete('/delete/:categoryId', async (req, res) => {
+categoryController.delete('/delete/:categoryId', passport.authenticate('jwt', {session: false}) , async (req, res) => {
+    if (req.user.admin_level > 3 ) {
+        return res.status(403).json({ msg: 'You do not have permission to perform' });
+    }
+
     const catId = req.params.categoryId;
 
     try {
@@ -105,7 +113,11 @@ categoryController.delete('/delete/:categoryId', async (req, res) => {
     }
 });
 
-categoryController.put('/edit/:categoryId', async (req, res) => {
+categoryController.put('/edit/:categoryId', passport.authenticate('jwt', {session: false}) , async (req, res) => {
+    if (req.user.admin_level > 3 ) {
+        return res.status(403).json({ msg: 'You do not have permission to perform' });
+    }
+    
     const catId = req.params.categoryId;
     const { name, description, image } = req.body;
 

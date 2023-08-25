@@ -3,6 +3,7 @@ const subcategoryController = express.Router();
 const Subcategory = require('../models/subcategory.model');
 const Topic = require("../models/topic.model");
 const Category = require("../models/category.model");
+const passport = require('passport');
 
 
 
@@ -64,7 +65,10 @@ subcategoryController.get('/topics', async (req, res) => {
     }
 });
 
-subcategoryController.post('/create', async(req, res) => {
+subcategoryController.post('/create', passport.authenticate('jwt', {session: false}) , async(req, res) => {
+    if (req.user.admin_level < 3) {
+        return res.status(401).json({ msg: 'You are not authorized to perform' });
+    }
     const {name, category} = req.body
 
     try {
