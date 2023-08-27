@@ -13,6 +13,7 @@ import AppHeader from "./components/Header";
 import TopicList from "./containers/TopicList";
 import TopicForm from "./containers/TopicForm";
 import ReadCategories from "./containers/admin/readCategories";
+import Profile from "./containers/Profile";
 import jwt_decode from "jwt-decode";
 
 const authInitialState = {
@@ -92,6 +93,7 @@ function App() {
                                     <Route path="/topic" element={<Topic />} />
                                     <Route path="/newcategory" element={<CategoryForm />} />
                                     <Route path="/newtopic" element={<TopicForm />} />
+                                    <Route path="/profile" element={<Profile />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
                                         <Route path="/admin/cat" element={<ReadCategories />} />
                                     ) : null///TODO: añadir 404

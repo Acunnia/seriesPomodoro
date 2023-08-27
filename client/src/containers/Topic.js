@@ -7,9 +7,6 @@ import Meta from "antd/es/card/Meta";
 import Reply from "../components/Reply";
 import CommentForm from "../components/commentForm";
 
-const { Title, Text } = Typography;
-const { TextArea } = Input;
-
 const Topic = props => {
     const [ contentLoading, setContentLoading ] = useState(true);
     const [ userLogued, setUserLogued ] = useState(false)
