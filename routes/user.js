@@ -89,4 +89,35 @@ userController.post('/login', (req,res) => {
     });
 });
 
+userController.get('/search/:name', (req, res) => {
+    const name = req.params.name;
+
+    User.findOne({ username: { $regex: new RegExp(name, 'i') } })
+        .populate('role', 'name')
+        .populate('replies')
+        .populate('topics')
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            const formattedRegisterDate = user.registerDate.toDateString();
+
+            const result = {
+                username: user.username,
+                role: user.role ? user.role.name : null,
+                bio: user.bio,
+                registerDate: formattedRegisterDate,
+                numReplies: user.replies.length,
+                numTopics: user.topics.length,
+            };
+
+            return res.status(200).json(result);
+        })
+        .catch(error => {
+            console.error(error);
+            return res.status(500).json({ message: 'Error en el servidor' });
+        });
+})
+
 module.exports = userController

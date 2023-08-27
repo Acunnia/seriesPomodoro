@@ -93,7 +93,7 @@ function App() {
                                     <Route path="/topic" element={<Topic />} />
                                     <Route path="/newcategory" element={<CategoryForm />} />
                                     <Route path="/newtopic" element={<TopicForm />} />
-                                    <Route path="/profile" element={<Profile />} />
+                                    <Route path="/profile/:name" element={<Profile />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
                                         <Route path="/admin/cat" element={<ReadCategories />} />
                                     ) : null///TODO: añadir 404
