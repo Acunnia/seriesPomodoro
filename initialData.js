@@ -8,6 +8,10 @@ const RoleModelInitial = [
     { name: 'Admin', admin_level: 5, users: [] },
 ];
 
+const SettingsModelInitial = [
+    
+]
+
 async function populateInitialData() {
     try {
         await mongoose.connect(process.env.MONGO, {

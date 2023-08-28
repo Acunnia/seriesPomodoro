@@ -1,0 +1,14 @@
+{
+    "create_category": 3,
+    "create_subcategory": 3,
+    "edit_category": 3,
+    "edit_subcategory": 3,
+    "delete_category": 5,
+    "delete_subcategory": 5,
+    "edit_user": 5,
+    "delete_user": 5,
+    
+    "create_role": 5,
+    "edit_role": 5,
+    "delete_role": 5
+}

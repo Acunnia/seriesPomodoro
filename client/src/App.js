@@ -15,6 +15,7 @@ import TopicForm from "./containers/TopicForm";
 import ReadCategories from "./containers/admin/readCategories";
 import Profile from "./containers/Profile";
 import jwt_decode from "jwt-decode";
+import ReadRoles from './containers/admin/readRoles';
 
 const authInitialState = {
     user: null,
@@ -95,7 +96,10 @@ function App() {
                                     <Route path="/newtopic" element={<TopicForm />} />
                                     <Route path="/profile/:name" element={<Profile />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
-                                        <Route path="/admin/cat" element={<ReadCategories />} />
+                                        <>
+                                            <Route path="/admin/cat" element={<ReadCategories />} />
+                                            <Route path="/admin/role" element={<ReadRoles />} />
+                                        </>
                                     ) : null///TODO: añadir 404
                                 }
                                 </Routes>

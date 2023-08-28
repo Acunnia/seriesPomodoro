@@ -19,7 +19,7 @@ module.exports = passport => {
                     id: user.id,
                     username: user.username,
                     email: user.email,
-                    admin_level: user.admin_level
+                    admin_level: user.role.admin_level
                 });
             } else {
                 done(null, false);

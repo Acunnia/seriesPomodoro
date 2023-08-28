@@ -66,11 +66,14 @@ export default function Read() {
         setIsModalVisible(false);
         setSelectedCategory(null);
         if (mode === "create") {
-            api.post("/categories/create", {
+            api.post("/categories/create",  {
                 name: categoryData.name,
                 description: categoryData.description,
                 image: categoryData.image
-            })
+            }, {headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
+            },})
                 .then((response) => {
                     fetchCategories();
                 })

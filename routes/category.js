@@ -4,6 +4,7 @@ const Category = require('../models/category.model')
 const Topic = require("../models/topic.model");
 const Subcategory = require('../models/subcategory.model');
 const passport = require('passport');
+const checkPermissionMiddleware = require('../utils/checkPermission');
 
 // [/api/categories] /
 // get all categories raw
@@ -14,10 +15,7 @@ categoryController.get('/', (req, res) => {
 });
 
 
-categoryController.post('/create', passport.authenticate('jwt', {session: false}) , (req, res) => {
-    if (req.user.admin_level > 3 ) {
-        return res.status(403).json({ msg: 'You do not have permission to perform' });
-    }
+categoryController.post('/create', passport.authenticate('jwt', {session: false}), checkPermissionMiddleware("create_category"), (req, res) => {
     const { name, description, image } = req.body
 
     const newCat = new Category({ name, description, image })
@@ -87,11 +85,7 @@ categoryController.get('/topics', async (req, res) => {
     }
 });
 
-categoryController.delete('/delete/:categoryId', passport.authenticate('jwt', {session: false}) , async (req, res) => {
-    if (req.user.admin_level > 3 ) {
-        return res.status(403).json({ msg: 'You do not have permission to perform' });
-    }
-
+categoryController.delete('/delete/:categoryId', passport.authenticate('jwt', {session: false}), checkPermissionMiddleware("delete_category"), async (req, res) => {
     const catId = req.params.categoryId;
 
     try {
