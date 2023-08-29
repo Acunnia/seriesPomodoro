@@ -76,7 +76,7 @@ topicController.post('/create', passport.authenticate('jwt', {session: false}), 
                                     // Actualizar las referencias al último tema y última respuesta en el autor del tema
                                     return User.findById(author)
                                         .then(topicAuthor => {
-                                            topicAuthor.lastreply = savedReply._id;
+                                            topicAuthor.replies.push(savedReply._id);
                                             topicAuthor.topics.push(savedTopic._id);
                                             return topicAuthor.save();
                                         });
