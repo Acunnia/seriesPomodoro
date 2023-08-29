@@ -16,6 +16,7 @@ import ReadCategories from "./containers/admin/readCategories";
 import Profile from "./containers/Profile";
 import jwt_decode from "jwt-decode";
 import ReadRoles from './containers/admin/readRoles';
+import ReadUsers from './containers/admin/readUsers';
 
 const authInitialState = {
     user: null,
@@ -99,6 +100,7 @@ function App() {
                                         <>
                                             <Route path="/admin/cat" element={<ReadCategories />} />
                                             <Route path="/admin/role" element={<ReadRoles />} />
+                                            <Route path="/admin/user" element={<ReadUsers />} />
                                         </>
                                     ) : null///TODO: añadir 404
                                 }

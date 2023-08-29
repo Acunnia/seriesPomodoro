@@ -7,8 +7,11 @@ const secret = '10';
 const jwt = require('jsonwebtoken');
 
 userController.get('/', (req, res) => {
-    User.find().populate('role').then(users => {
-        res.status(200).json({users});
+    User.find().populate({
+        path: 'role',
+        select: '_id name'
+    }).select('-password').then(users => {
+        res.status(200).json({ users });
     });
 });
 
@@ -26,7 +29,7 @@ userController.post('/register', (req, res) => {
                     username,
                     email,
                     password,
-                    admin_level: role._id,
+                    role: role._id,
                 });
 
                 newUser

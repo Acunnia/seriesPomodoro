@@ -107,11 +107,7 @@ categoryController.delete('/delete/:categoryId', passport.authenticate('jwt', {s
     }
 });
 
-categoryController.put('/edit/:categoryId', passport.authenticate('jwt', {session: false}) , async (req, res) => {
-    if (req.user.admin_level > 3 ) {
-        return res.status(403).json({ msg: 'You do not have permission to perform' });
-    }
-    
+categoryController.put('/edit/:categoryId', passport.authenticate('jwt', {session: false}), checkPermissionMiddleware("edit_category"), async (req, res) => {    
     const catId = req.params.categoryId;
     const { name, description, image } = req.body;
 
