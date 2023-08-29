@@ -51,6 +51,7 @@ replyController.post('/add', passport.authenticate('jwt', {session: false}), asy
 
         const savedReply = await newReply.save();
 
+        // Find the topic and update its replies field
         foundTopic.replies.push(savedReply._id);
         await foundTopic.save();
 
@@ -59,7 +60,16 @@ replyController.post('/add', passport.authenticate('jwt', {session: false}), asy
         user.replies.push(savedReply._id);
         await user.save();
 
-        res.status(201).json({ message: 'Reply added' });
+        const populatedReply = await Reply.findById(savedReply._id, 'author').lean().populate({path: 'author', select: '-password'});
+
+        const count = await Reply.countDocuments({ topic: topicId });
+
+        // Convert the reply to JSON
+        const resReply = savedReply.toObject();
+        resReply.author = populatedReply.author;
+
+
+        res.status(201).json({ resReply, topicTotalPages: Math.ceil(count / 10) });
     } catch (error) {
         console.error('Error trying to post the reply:', error);
         res.status(500).json({ error: 'Something went wrong' });

@@ -10,8 +10,7 @@ const Subcategory = require("../models/subcategory.model");
 topicController.get('/',async (req, res) => {
     try {
         const { page = 1, limit = 10, id = null } = req.query;
-
-        const result = { currentPage: page };
+        const result = {};
 
         const foundTopic = await Topic.findById(id)
             .populate({
@@ -20,6 +19,11 @@ topicController.get('/',async (req, res) => {
             })
             .populate({
             path: 'replies',
+            options: {
+                limit,
+                skip: (page - 1) * limit,
+                sort: { postDate: 1}
+            },
             populate: {
                 path: 'author',
                 select: 'username',
@@ -30,6 +34,9 @@ topicController.get('/',async (req, res) => {
             return res.status(404).json({ msg: 'Topic not found.' });
         }
         result.topic = foundTopic
+        result.page = page;
+        const count = await Reply.countDocuments({ topic: foundTopic._id });
+        result.totalPages = Math.ceil(count / limit);
         return res.status(200).json(result);
     } catch (err) {
         console.error(err);
