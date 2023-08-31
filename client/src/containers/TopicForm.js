@@ -31,7 +31,7 @@ const TopicForm = props => {
         const topicData = {
             ...data,
             author: state.user.id,
-            subcategory: subcategory._id,
+            subcategory: catID,
         };
 
         api.post('/topics/create', topicData, {
@@ -60,7 +60,7 @@ const TopicForm = props => {
                         <Title level={3}>New topic</Title>
                         <Text>
                             Posteando en{' '}
-                            <Link to={`/subcategory?id=${catID}`}>
+                            <Link to={`/category?id=${catID}`}>
                                 {subcategory ? (
                                     subcategory.name
                                 ) : (

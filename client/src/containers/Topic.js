@@ -26,7 +26,7 @@ const Topic = props => {
         if (state.user) {
             setUserLogued(state)
         }
-        api.get(`/topics?id=${id}&page=${currentPage}`).then(result => {
+        api.get(`/topics?id=${id}`).then(result => {
             setTopic(result.data.topic)
             setPages({
                 currentPage: result.data.page,

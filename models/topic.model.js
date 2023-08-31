@@ -7,7 +7,9 @@ const topicSchema = new mongoose.Schema({
     author: {       type: mongoose.Schema.Types.ObjectId,   ref: 'User'},
     lastreply: {    type: mongoose.Schema.Types.ObjectId,   ref: 'Reply'},
     replies: [{     type: mongoose.Schema.Types.ObjectId,   ref: 'Reply'}],
-}, { collection: 'topics' });
+},{
+    timestamps: true
+} , { collection: 'topics' });
 
 const Topic = mongoose.model('Topic', topicSchema);
 

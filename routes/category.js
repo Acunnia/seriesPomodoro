@@ -35,7 +35,7 @@ categoryController.get('/topics', async (req, res) => {
             return res.status(400).json({ msg: 'No id provided.' });
         }
 
-        const result = { currentPage: page };
+        const result = {};
 
         // Buscar la categoría por su ID y poblar sus subcategorías y temas relacionados
         const category = await Category.findById(id)
@@ -74,8 +74,14 @@ categoryController.get('/topics', async (req, res) => {
         result.description = category.description;
         result.subcategories = category.subcategories;
 
-        // Contar el número total de temas
-        const count = await Topic.countDocuments({ _id: { $in: result.topics } });
+        result.page = page
+        const findedCategory = await Category.findById(id).populate('subcategories').exec();
+    
+        let count = 0;
+
+        for (const subcategory of findedCategory.subcategories) {
+            count += subcategory.topics.length;
+        }
         result.totalPages = Math.ceil(count / limit);
 
         return res.status(200).json(result);

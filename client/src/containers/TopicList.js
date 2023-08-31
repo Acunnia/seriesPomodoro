@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link, useSearchParams, useLocation, useNavigate} from "react-router-dom";
-import {Skeleton, Modal, Button, Pagination, Table, Typography } from "antd";
+import {Skeleton, Modal, Button, Pagination, Table, Typography, Divider } from "antd";
 import api from "../utils/api";
 import {FormOutlined} from "@ant-design/icons";
 import SubCategory from "../components/SubCategory";
@@ -16,14 +16,17 @@ const TopicList = props => {
 
     const [ubication, setUbication] = useState("")
     const [contentLoading, setContentLoading] = useState(true);
+    const [pageLoading, setPageLoading] = useState(false);
     const [subcategories, setSubcategories] = useState([])
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id")
+    const currentPage = searchParams.get("page")
     const [topics, setTopics] = useState([]);
     const [pages, setPages] = useState({
-        currentPage: null,
-        totalPages: null,
+        currentPage,
+        totalPages: 1,
     });
+
     const location = useLocation();
     const isSubcategory = location.state && location.state.query === 'subcat';
 
@@ -32,11 +35,15 @@ const TopicList = props => {
         if (isSubcategory) {
             api.get(`/subcategories/topics?id=${id}`)
                 .then((result) => {
+                    console.log(result.data)
                     setSubcategories([])
                     setTopics(result.data.topics);
-                    setUbication(result.data.name) // Just initial
+                    setUbication(result.data.name)
+                    setPages({
+                        currentPage: result.data.page,
+                        totalPages: result.data.totalPages,
+                    })
                     setContentLoading(false);
-                    //todo: pagination
                 })
                 .catch((e) => {
                     Modal.error({
@@ -47,13 +54,14 @@ const TopicList = props => {
         } else {
             api.get(`/categories/topics?id=${id}`)
                 .then(result => {
+                    console.log(result.data)
                     setSubcategories(result.data.subcategories)
                     setTopics(result.data.topics);
-                    setUbication(result.data.name) // Just initial
+                    setUbication(result.data.name)
                     setPages({
-                        currentPage: result.data.currentPage,
-                        totalPages: result.data.totalPages * 10,
-                    });
+                        currentPage: result.data.page,
+                        totalPages: result.data.totalPages,
+                    })
                     setContentLoading(false);
                 })
                 .catch(e => {
@@ -63,19 +71,24 @@ const TopicList = props => {
                     });
                 });
         }
-    }, [props.id, isSubcategory, setContentLoading]);
+    }, [id]);
 
     const fetchPage = page => {
-        setContentLoading(true);
+        setPageLoading(true);
 
         if (isSubcategory) {
-            console.log("subcategory")
             api.get(`/subcategories/topics?id=${id}&page=${page}`)
                 .then((result) => {
+                    console.log(result.data)
                     setSubcategories([])
                     setTopics(result.data.topics);
                     setUbication(result.data.name)
-                    setContentLoading(false);
+                    setPages({
+                        currentPage: result.data.page,
+                        totalPages: result.data.totalPages,
+                      });
+                      setPageLoading(false);
+                    navigate(`/category?id=${id}&page=${page}`);
                 })
                 .catch((e) => {
                     Modal.error({
@@ -84,14 +97,16 @@ const TopicList = props => {
                     });
                 });
         } else {
-            api.get(`/categories/topics?id=${props.id}&page=${page}`)
+            api.get(`/categories/topics?id=${id}&page=${page}`)
                 .then(result => {
+                    console.log(result.data)
                     setTopics(result.data.topics);
                     setPages({
-                        currentPage: result.data.currentPage,
-                        totalPages: result.data.totalPages * 10,
-                    });
-                    setContentLoading(false);
+                        currentPage: result.data.page,
+                        totalPages: result.data.totalPages,
+                      });
+                      setPageLoading(false);
+                    navigate(`/category?id=${id}&page=${page}`);
                 })
                 .catch(e => {
                     Modal.error({
@@ -103,6 +118,19 @@ const TopicList = props => {
 
 
     };
+
+    const pagination = (
+        <div>
+            <Divider />
+          <Pagination
+            current={parseInt(pages.currentPage, 10)}
+            total={parseInt(pages.totalPages, 10) * 10}
+            showSizeChanger={false}
+            onChange={fetchPage}
+          />
+          <Divider />
+        </div>
+      );
 
     const columns = [
         {
@@ -167,7 +195,8 @@ const TopicList = props => {
                 )}
             </div>
             <div>
-                <Link
+                {isSubcategory && (
+                    <Link
                     to={`/newtopic?id=${id}`}
                     className={"NewTopic"}
                 >
@@ -175,6 +204,9 @@ const TopicList = props => {
                         Create new topic
                     </Button>
                 </Link>
+                )}
+                
+                {pages.totalPages > 1 && pagination}
                 <Table
                     columns={columns}
                     dataSource={topics}
@@ -186,12 +218,7 @@ const TopicList = props => {
                     })}
                     className="hoverable-table"
                 />
-                <Pagination
-                    current={pages.currentPage}
-                    total={pages.totalPages}
-                    showSizeChanger={false}
-                    onChange={fetchPage}
-                />
+                {pages.totalPages > 1 && pagination}
 
                 <Link
                     to={`/newsubcat?id=${id}`}

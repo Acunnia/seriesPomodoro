@@ -56,7 +56,7 @@ topicController.post('/create', passport.authenticate('jwt', {session: false}), 
             const newTopic = new Topic({
                 title,
                 description,
-                category: existingSubcategory.category,
+                category: existingSubcategory,
                 author,
             });
 

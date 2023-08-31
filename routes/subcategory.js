@@ -25,7 +25,8 @@ subcategoryController.get('/topics', async (req, res) => {
         if (!id) {
             return res.status(400).json({ msg: 'No id provided.' });
         }
-        const result = { currentPage: page };
+        const result = {};
+
         const subcategory = await Subcategory.findById(id)
             .populate({
                 path: 'topics',
@@ -55,8 +56,8 @@ subcategoryController.get('/topics', async (req, res) => {
 
         result.name = subcategory.name;
 
-        // Contar el número total de temas
-        const count = await Topic.countDocuments({ _id: { $in: result.topics } });
+        result.page = page;
+        const count = await Topic.countDocuments({ category: id });
         result.totalPages = Math.ceil(count / limit);
 
         return res.status(200).json(result);
