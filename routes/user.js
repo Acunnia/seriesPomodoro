@@ -35,7 +35,12 @@ userController.post('/register', (req, res) => {
                 newUser
                     .save()
                     .then(savedUser => {
-                        res.status(200).json({user: savedUser});
+                        Role.findOne(savedUser.role._id).then(role => {
+                            role.users.push(savedUser._id);
+                            role.save().then(() => {
+                                res.status(200).json({user: savedUser});
+                            })
+                        })
                     })
                     .catch(saveErr => {
                         res.status(400).json({msg: 'Failed to register user.', err: saveErr});

@@ -44,8 +44,6 @@ categoryController.get('/topics', async (req, res) => {
                 populate: {
                     path: 'topics',
                     options: {
-                        limit,
-                        skip: (page - 1) * limit,
                         sort: { updatedAt: -1 },
                     },
                     populate: {
@@ -63,12 +61,19 @@ categoryController.get('/topics', async (req, res) => {
             return res.status(404).json({ msg: 'Category not found.' });
         }
 
-        result.topics = category.subcategories.reduce((topics, subcategory) => {
+        // Obtén todos los temas de todas las subcategorías
+        const allTopics = category.subcategories.reduce((topics, subcategory) => {
             if (subcategory.topics && subcategory.topics.length > 0) {
                 topics.push(...subcategory.topics);
             }
             return topics;
         }, []);
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+
+        // Ordena los temas por fecha de actualización y toma los primeros 10
+        result.topics = allTopics.sort((a, b) => b.updatedAt - a.updatedAt).slice(startIndex, endIndex);
 
         result.name = category.name;
         result.description = category.description;

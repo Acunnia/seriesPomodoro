@@ -129,7 +129,10 @@ export default function Read() {
             api.post("/subcategories/create", {
                 name: subcategoryData.name,
                 category: subcategoryData.category
-            })
+            },{headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
+            },})
                 .then((response) => {
                     fetchCategories();
                 })

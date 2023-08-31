@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
 const RegistrationForm = () => {
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const onFinish = (values) => {
         setLoading(true);
@@ -14,6 +16,7 @@ const RegistrationForm = () => {
             })
             .then((response) => {//ToDO: Mensjaes de respuesta
                 console.log("Registro exitoso:", response.data);
+                navigate("/login", { replace: true });
             })
             .catch((error) => {
                 console.error("Error al registrar:", error);

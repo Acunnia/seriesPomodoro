@@ -219,17 +219,6 @@ const TopicList = props => {
                     className="hoverable-table"
                 />
                 {pages.totalPages > 1 && pagination}
-
-                <Link
-                    to={`/newsubcat?id=${id}`}
-                    className={"NewTopic"}
-                >
-                    <Button type="primary" icon={<FormOutlined />}>
-                        Create new subcategory
-                    </Button>
-                </Link>
-
-
             </div>
         </div>
     );
