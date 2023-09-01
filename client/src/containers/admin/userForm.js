@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 
-const UserForm = ({ user, onSave }) => {
+const UserForm = ({ user, onSave, roles }) => {
     const [form] = Form.useForm();
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         if (user) {
             setIsEditing(true);
+            console.log(user);
+            user.roleId = user.role._id
             form.setFieldsValue(user);
         }
     }, [user, form]);
 
     const onFinish = (values) => {
         onSave(values);
+        user = {}
         form.resetFields();
     };
 
@@ -28,13 +31,17 @@ const UserForm = ({ user, onSave }) => {
             <Form.Item label="Email" name="email">
                 <Input />
             </Form.Item>
-            <Form.Item label="Image" name="image">
-                <Input />
+            <Form.Item label="Role" name="roleId">
+            <Select defaultValue={user.role._id} style={{ width: '100%' }}>
+                {roles.map(role => (
+                    <Select.Option key={role._id} value={role._id}>
+                        {role.name}
+                    </Select.Option>
+                ))}
+                </Select>
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    {isEditing ? 'Update' : 'Create'}
-                </Button>
+                <Button type="primary" htmlType="submit">Update</Button>
             </Form.Item>
         </Form>
     );

@@ -3,15 +3,24 @@ const express = require('express')
 const userController = express.Router();
 const User = require('../models/user.model')
 const Role = require('../models/role.model')
+const passport = require('passport');
+const checkPermissionMiddleware = require('../utils/checkPermission');
 const secret = '10';
 const jwt = require('jsonwebtoken');
 
 userController.get('/', (req, res) => {
+    const response = {};
     User.find().populate({
         path: 'role',
         select: '_id name'
     }).select('-password').then(users => {
-        res.status(200).json({ users });
+        response.users = users;
+        Role.find().then(roles => { 
+            response.roles = roles;
+            res.status(200).json({ response });
+        })
+
+        
     });
 });
 
@@ -126,6 +135,35 @@ userController.get('/search/:name', (req, res) => {
             console.error(error);
             return res.status(500).json({ message: 'Error en el servidor' });
         });
+})
+
+userController.put('/edit/:id', passport.authenticate('jwt', {session: false}), checkPermissionMiddleware("edit_user"), async (req, res) => {
+    const userId = req.params.id
+    const { username, email, role } = req.body
+    console.log(req.body, userId);
+    try {
+        const user = await User.findById(userId);
+        const currentRole = await Role.findById(user.role);
+        const newRole = await Role.findById(role)
+
+        //Try to update user
+        user.username = username;
+        user.email = email;
+        user.role = newRole._id;
+        user.save();
+
+        //Try to update role
+        currentRole.users.remove(user._id);
+        currentRole.save();
+
+        newRole.users.push(user._id);
+        newRole.save();
+
+        res.status(200).json({message: 'Usuario actualizado correctamente'});
+    
+    } catch (error) {
+        res.status(500).json({message: 'Error en el servidor'});
+    }
 })
 
 module.exports = userController

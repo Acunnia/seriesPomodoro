@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
@@ -14,12 +14,12 @@ const RegistrationForm = () => {
                 email: values.email,
                 password: values.password,
             })
-            .then((response) => {//ToDO: Mensjaes de respuesta
-                console.log("Registro exitoso:", response.data);
+            .then((response) => {
+                message.success("Posted!")
                 navigate("/login", { replace: true });
             })
             .catch((error) => {
-                console.error("Error al registrar:", error);
+                message.error(error.response.data.message);
             })
             .finally(() => {
                 setLoading(false);

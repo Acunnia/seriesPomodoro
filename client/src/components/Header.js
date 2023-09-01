@@ -15,7 +15,6 @@ const { Header } = Layout;
 const AppHeader = () => {
     const { dispatch, state } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [uuusername, setUuusername] = useState("")
 
     const logout = () => {
         Modal.confirm({

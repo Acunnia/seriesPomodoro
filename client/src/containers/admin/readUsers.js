@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Space, Table} from "antd";
 import api from "../../utils/api";
 import {AuthContext} from "../../utils/auth";
+import UserForm from './userForm';
 
 export default function Readusers() {
     const { state } = useContext(AuthContext);
@@ -9,6 +10,7 @@ export default function Readusers() {
     const [users, setUsers] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [roles, setRoles] = useState([])
 
     useEffect(() => {
         fetchUsers();
@@ -22,7 +24,9 @@ export default function Readusers() {
                 'Content-Type': 'application/json'
             },})
             .then((response) => {
-                setUsers(response.data.users);
+                console.log(response.data);
+                setRoles(response.data.response.roles);
+                setUsers(response.data.response.users);
             })
             .catch((error) => {
             }).finally(() => setLoading(false));
@@ -49,18 +53,24 @@ export default function Readusers() {
 
     const handleModalCancel = () => {
         setIsModalVisible(false);
-        setSelectedUser(null);
+        setSelectedUser({});
     };
 
     const handleSave = (data) => {
         setIsModalVisible(false);
         setSelectedUser(null);
+
+        console.log(data);
         
         api.put(`/users/edit/${data._id}`, {
-            name: data.name,
-            description: data.description,
-            image: data.image
-        })
+            username: data.username,
+            email: data.email,
+            role: data.roleId,
+        },{
+            headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
+        }})
             .then((response) => {
                 fetchUsers();
             })
@@ -101,7 +111,16 @@ export default function Readusers() {
 
     return (
         <div>
-            <Table columns={columns} rowKey={(user) => user._id} dataSource={users}></Table>        
+            <Table columns={columns} rowKey={(user) => user._id} dataSource={users}></Table>       
+
+            <Modal
+                title='Edit Category'
+                open={isModalVisible}
+                onCancel={handleModalCancel}
+                footer={null}
+            >
+                <UserForm user={selectedUser} onSave={handleSave} roles={roles} />
+            </Modal> 
         </div>
     );
 }
