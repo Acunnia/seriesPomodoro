@@ -140,7 +140,6 @@ userController.get('/search/:name', (req, res) => {
 userController.put('/edit/:id', passport.authenticate('jwt', {session: false}), checkPermissionMiddleware("edit_user"), async (req, res) => {
     const userId = req.params.id
     const { username, email, role } = req.body
-    console.log(req.body, userId);
     try {
         const user = await User.findById(userId);
         const currentRole = await Role.findById(user.role);
