@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {List, Skeleton} from 'antd';
+import { Skeleton} from 'antd';
 import api from '../utils/api';
 import Category from '../components/Category'
 
@@ -19,7 +19,6 @@ const Forum = () => {
                 setCategories(response.data.categories);
             })
             .catch((error) => {
-                //TODO: Modal con error
             }).finally(() => setLoading(false));
     };
 

@@ -6,7 +6,9 @@ const replySchema = new mongoose.Schema({
     topic: {        type: mongoose.Schema.Types.ObjectId,   ref: 'Topic'},
     postDate: {     type: Date,                                                              default: Date.now},
     likedBy: [{     type: mongoose.Schema.Types.ObjectId,   ref: "User"}]
-}, { collection: 'replies' });
+},{
+    timestamps: true
+} , { collection: 'replies' });
 
 const Reply = mongoose.model('Reply', replySchema);
 

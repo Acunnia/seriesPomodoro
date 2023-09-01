@@ -10,7 +10,6 @@ const controllers = require('./routes')
 const userController = require('./routes/user')
 const User = require("./models/user.model");
 const { Strategy, ExtractJwt } = require('passport-jwt');
-const {request} = require("express");
 
 // Middlewares
 app.use(express.json());
@@ -27,6 +26,7 @@ app.use('/api/categories', controllers.categoryController);
 app.use('/api/subcategories', controllers.subcategoryController);
 app.use('/api/topics', controllers.topicController);
 app.use('/api/reply', controllers.replyController);
+app.use('/api/stats', controllers.statsController);
 
 
 // If no API routes

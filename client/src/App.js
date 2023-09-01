@@ -17,6 +17,7 @@ import Profile from "./containers/Profile";
 import jwt_decode from "jwt-decode";
 import ReadRoles from './containers/admin/readRoles';
 import ReadUsers from './containers/admin/readUsers';
+import Activity from './containers/Activity';
 
 const authInitialState = {
     user: null,
@@ -96,6 +97,7 @@ function App() {
                                     <Route path="/newcategory" element={<CategoryForm />} />
                                     <Route path="/newtopic" element={<TopicForm />} />
                                     <Route path="/profile/:name" element={<Profile />} />
+                                    <Route path="/activity" element={<Activity />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
                                         <>
                                             <Route path="/admin/cat" element={<ReadCategories />} />

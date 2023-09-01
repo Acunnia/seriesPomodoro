@@ -2,7 +2,7 @@
 
 :star: Star us on GitHub — it motivates us a lot!
 
-A forum app powered by MongoDB, Express, React + AntD and NodeJS
+A forum app inspired in Lost-Ark Forums powered by MongoDB, Express, React + AntD and NodeJS
 
 ![frontend](./assets/screenshot1.png)
 
