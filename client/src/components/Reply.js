@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Card, Avatar, Row, Col, Typography, Space } from 'antd';
+import { message as antMessage, Card, Avatar, Row, Col, Typography, Space } from 'antd';
 import {HeartTwoTone, LikeOutlined} from '@ant-design/icons';
 import api from "../utils/api";
 import {AuthContext} from "../utils/auth";
 
-const { Meta } = Card;
 const { Text } = Typography;
 
 const Reply = ({ postData }) => {
@@ -35,8 +34,12 @@ const Reply = ({ postData }) => {
                  setLiked(!liked);
              }
          }).catch(error => {
-             //TODO Modal error o logout
-            console.error('Error liking reply:', error);
+            if (error.response.status == "401"){
+                antMessage.error('You need to log in before like this reply!');
+            } else {
+                antMessage.error('Unexpected error');
+                console.error('Error liking reply:', error);
+            }
         })
     }
 

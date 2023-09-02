@@ -1,3 +1,7 @@
 .header-wrap .header{
     background-color: var(--bg-header) !important;
 }
+
+.logo:hover{
+    cursor: pointer;
+}

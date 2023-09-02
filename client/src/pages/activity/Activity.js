@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Typography, Skeleton } from 'antd';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { Link } from 'react-router-dom';
 import {
   MessageOutlined,
   UserAddOutlined,
   CommentOutlined,
 } from '@ant-design/icons';
-import Reply from '../components/Reply';
+import Reply from '../../components/Reply';
 
 // antd
 const { Title } = Typography;
@@ -24,14 +24,39 @@ const Activity = props => {
     });
   }, []);
 
+  const activityDivStyle = {
+    borderLeft: '2px solid #40a9ff',
+    padding: '10px 15px',
+    paddingRight: '0',
+    width: '100%',
+  };
+
+  const infoStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontSize: '16px',
+  };
+
+  const postInfoStyle = {
+    marginBottom: '20px',
+  };
+
+  const dateStyle = {
+    color: '#bfbfbf',
+  };
+
+  const iconStyle = {
+    marginRight: '5px',
+  };
+
   const activitiesMapper = activity => {
     switch (activity.type) {
       case 'user':
         return (
-          <div key={activity._id}>
-            <div>
+          <div style={activityDivStyle} key={activity._id}>
+            <div style={infoStyle}>
               <span>
-                <UserAddOutlined />
+                <UserAddOutlined style={iconStyle} />
                 Let's welcome our newest user,{' '}
                 <Link to="/">{activity.username}</Link>
               </span>
@@ -40,10 +65,10 @@ const Activity = props => {
         );
       case 'topic':
         return (
-          <div key={activity._id}>
-            <div>
+          <div style={activityDivStyle} key={activity._id}>
+            <div style={infoStyle}>
               <span>
-                <CommentOutlined />
+                <CommentOutlined style={iconStyle} />
                 <Link to="/">{activity.author.username}</Link> created a new
                 topic:{' '}
                 <Link to={`/topic?id=${activity._id}`} >
@@ -59,10 +84,10 @@ const Activity = props => {
         );
       case 'reply':
         return (
-          <div key={activity._id}>
-            <div>
+          <div style={activityDivStyle} key={activity._id}>
+            <div style={ postInfoStyle}>
               <span>
-                <MessageOutlined />
+                <MessageOutlined style={iconStyle} />
                 <Link to="/">{activity.author.username}</Link> posted a reply in
                 the topic{' '}
                 <Link to={`/topic?id=${activity.topic._id}`}>
@@ -86,8 +111,13 @@ const Activity = props => {
         </Title>
       </Row>
       <Row>
-        <Col span={18}>
-          <div>
+        <Col style={{width:"100%"}}>
+          <div style={{
+              borderRadius: '3px',
+              boxShadow: '0 0 10px #00276617',
+              margin: 'auto',
+              padding: '40px',
+            }}>
             {loading ? (
               <>
                 <Skeleton active />

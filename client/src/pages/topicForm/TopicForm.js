@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Typography, Form, Input, Button, Modal, Spin } from 'antd';
 import { CommentOutlined } from '@ant-design/icons';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { Link, useNavigate, useSearchParams} from 'react-router-dom';
-import { AuthContext} from "../utils/auth";
+import { AuthContext} from "../../utils/auth";
 import {log} from "async";
 
 // antd

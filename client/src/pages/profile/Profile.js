@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, Avatar, Row, Col, Button } from 'antd';
 import { UserOutlined, EditOutlined } from '@ant-design/icons';
-import { AuthContext } from '../utils/auth';
-import api from '../utils/api';
+import { AuthContext } from '../../utils/auth';
+import api from '../../utils/api';
 
 const UserPublicProfile = () => {
     const { name } = useParams();

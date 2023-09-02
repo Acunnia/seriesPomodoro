@@ -30,9 +30,15 @@ const AppHeader = () => {
 
     const defaultItems = [
         {
-            label: "Boards",
-            key: 'boards',
+            label: "Home",
+            key: 'home',
             onClick: () => navigate("/"),
+            icon: <AppstoreOutlined />,
+        },
+        {
+            label: "Activity",
+            key: 'activity',
+            onClick: () => navigate("/activity"),
             icon: <AppstoreOutlined />,
         },
         {
@@ -72,7 +78,7 @@ const AppHeader = () => {
     return (
         <Header className="header">
             <div className={"header-container"}>
-                <div className="logo">series Pomodoro</div>
+                <div className="logo" onClick={() => navigate("/")}>series Pomodoro</div>
                 <Menu style={{ minWidth: 0, flex: "auto", justifyContent: "flex-end", backgroundColor: "#111111", borderBottom: 0 }} mode="horizontal" className={"menu"} items={state.isAuthenticated? logedItems : defaultItems} />
             </div>
         </Header>

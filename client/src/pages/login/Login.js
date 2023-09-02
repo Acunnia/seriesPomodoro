@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
-import api from '../utils/api'
-import { AuthContext, reducer } from "../utils/auth";
+import api from '../../utils/api'
+import { AuthContext, reducer } from "../../utils/auth";
 import {Button, Form, Input} from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useNavigate } from "react-router-dom";

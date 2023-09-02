@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link, useSearchParams, useLocation, useNavigate} from "react-router-dom";
 import {Skeleton, Modal, Button, Pagination, Table, Typography, Divider } from "antd";
-import api from "../utils/api";
+import api from "../../utils/api";
 import {FormOutlined} from "@ant-design/icons";
-import SubCategory from "../components/SubCategory";
-import {AuthContext} from "../utils/auth";
-import './styles/Forum.styles.css'
+import SubCategory from "../../components/SubCategory";
+import {AuthContext} from "../../utils/auth";
+import './TopicList.styles.css'
 
 const { Text } = Typography;
 

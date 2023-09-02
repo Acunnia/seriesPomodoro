@@ -1,11 +1,11 @@
 import {Card, Divider, Input, message, Modal, Typography, Skeleton, Pagination} from "antd";
 import {useContext, useEffect, useState} from "react";
 import {useSearchParams, useNavigate} from "react-router-dom";
-import {AuthContext} from "../utils/auth";
-import api from "../utils/api";
+import {AuthContext} from "../../utils/auth";
+import api from "../../utils/api";
 import Meta from "antd/es/card/Meta";
-import Reply from "../components/Reply";
-import CommentForm from "../components/commentForm";
+import Reply from "../../components/Reply";
+import CommentForm from "../../components/commentForm";
 
 const Topic = props => {
     const navigate = useNavigate();

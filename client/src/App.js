@@ -4,20 +4,20 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider, theme, notification, message } from "antd";
 import Layout, { Content, Footer } from "antd/es/layout/layout";
 import { reducer, AuthContext } from "./utils/auth";
-import RegistrationForm from "./containers/RegistrationForm";
-import CategoryForm from "./containers/CategoryCreate";
-import Forum from "./containers/Forum";
-import Login from "./containers/Login"
-import Topic from "./containers/Topic"
+import RegistrationForm from "./pages/register/RegistrationForm";
+import CategoryForm from "./pages/categoryForm/CategoryCreate";
+import Forum from "./pages/forum/Forum";
+import Login from "./pages/login/Login"
+import Topic from "./pages/topic/Topic"
 import AppHeader from "./components/Header";
-import TopicList from "./containers/TopicList";
-import TopicForm from "./containers/TopicForm";
-import ReadCategories from "./containers/admin/readCategories";
-import Profile from "./containers/Profile";
+import TopicList from "./pages/topicList/TopicList";
+import TopicForm from "./pages/topicForm/TopicForm";
+import ReadCategories from "./pages/admin/readCategories";
+import Profile from "./pages/profile/Profile";
 import jwt_decode from "jwt-decode";
-import ReadRoles from './containers/admin/readRoles';
-import ReadUsers from './containers/admin/readUsers';
-import Activity from './containers/Activity';
+import ReadRoles from './pages/admin/readRoles';
+import ReadUsers from './pages/admin/readUsers';
+import Activity from './pages/activity/Activity';
 
 const authInitialState = {
     user: null,
@@ -67,10 +67,6 @@ function App() {
             description: desc,
             placement: place,
         });
-    };
-
-    const showMessage = (text) => {
-        message.success(text);
     };
 
     return (
