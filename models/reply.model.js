@@ -8,6 +8,7 @@ const replySchema = new mongoose.Schema({
     likedBy: [{     type: mongoose.Schema.Types.ObjectId,   ref: "User"}]
 },{
     timestamps: true
+// @ts-ignore
 } , { collection: 'replies' });
 
 const Reply = mongoose.model('Reply', replySchema);

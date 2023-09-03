@@ -41,6 +41,7 @@ statsController.get('/activity', async (req, res) => {
             .limit(5);
     
         topics.forEach(topic => {
+            // @ts-ignore
             topic.type = 'topic';
         });
     
@@ -52,7 +53,9 @@ statsController.get('/activity', async (req, res) => {
             .limit(5);
     
         users.forEach(user => {
+            // @ts-ignore
             user.type = 'user';
+            // @ts-ignore
             user.createdAt = user.registerDate;
         });
     
