@@ -4,6 +4,7 @@ const subcategoryController = require('./subcategory')
 const topicController = require('./topic')
 const replyController = require('./reply')
 const statsController = require('./stats');
+const roleController = require('./role');
 
 module.exports = {
     userController,
@@ -11,5 +12,6 @@ module.exports = {
     subcategoryController,
     topicController,
     replyController,
-    statsController
+    statsController,
+    roleController
 };

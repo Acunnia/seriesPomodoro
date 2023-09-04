@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Space, Table} from "antd";
 import api from "../../utils/api";
-import CategoryForm from "./categoryForm";
+import  RoleForm from "./RoleForm"
 import {AuthContext} from "../../utils/auth";
+
 
 export default function ReadRoles() {
     const { state } = useContext(AuthContext);
@@ -22,7 +23,8 @@ export default function ReadRoles() {
         setLoading(true)
         api.get("/roles")
             .then((response) => {
-                setRoles(response.data);
+                console.log(response)
+                setRoles(response.data.roles);
             })
             .catch((error) => {
             }).finally(() => setLoading(false));
@@ -56,7 +58,7 @@ export default function ReadRoles() {
 
     const handleModalCancel = () => {
         setIsModalVisible(false);
-        setSelectedRole(null);
+        setSelectedRole({});
     };
 
     const handleSave = (data) => {
@@ -94,8 +96,7 @@ export default function ReadRoles() {
         {
             title: 'Name',
             dataIndex: 'name',
-            key: 'name',
-            render: (text) => <a>{text}</a>,
+            key: 'name'
         },
         {
             title: 'Admin Level',
@@ -105,10 +106,10 @@ export default function ReadRoles() {
         {
             title: 'Action',
             key: 'action',
-            render: (_, cat) => (
+            render: (_, role) => (
                 <Space size="middle">
-                    <button onClick={() => handleEdit(cat)}>Edit {cat.name}</button>
-                    <button onClick={() => onDelete(cat._id)}>Delete</button>
+                    <button onClick={() => handleEdit(role)}>Edit {role.name}</button>
+                    <button onClick={() => onDelete(role._id)}>Delete</button>
                 </Space>
             ),
         },
@@ -122,12 +123,11 @@ export default function ReadRoles() {
             <Table columns={columns} dataSource={roles}></Table>
 
             <Modal
-                title={selectedRole ? 'Edit Role' : 'Create Category'}
+                title={selectedRole ? 'Edit Role' : 'Create Role'}
                 open={isModalVisible}
                 onCancel={handleModalCancel}
-                footer={null}
-            >
-                <CategoryForm data={selectedRole} onSave={handleSave} />
+                footer={null}>
+                <RoleForm roletoEdit={selectedRole} onSave={handleSave}  />
             </Modal>
         </div>
     );

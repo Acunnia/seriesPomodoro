@@ -12,6 +12,7 @@ topicController.get('/',async (req, res) => {
         const { page = 1, limit = 10, id = null } = req.query;
         const result = {};
 
+        // @ts-ignore
         const foundTopic = await Topic.findById(id)
             .populate({
                 path: 'author',
