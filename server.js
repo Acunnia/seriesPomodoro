@@ -8,6 +8,7 @@ const passport = require('passport');
 const mongoose = require("mongoose")
 const controllers = require('./routes')
 const { Strategy, ExtractJwt } = require('passport-jwt');
+const checkDB  = require('./utils/dbSeeder');
 
 // Middlewares
 app.use(express.json());
@@ -43,6 +44,8 @@ const connectDb = () => {
         useUnifiedTopology: true,
     });
 };
+
+checkDB();
 
 connectDb().then(async () => {
     app.listen(port, () => {
