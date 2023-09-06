@@ -1,7 +1,7 @@
 import './App.css';
-import { useEffect, useReducer } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ConfigProvider, theme, notification, message } from "antd";
+import { useEffect, useReducer, useState } from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ConfigProvider, theme, notification } from "antd";
 import Layout, { Content, Footer } from "antd/es/layout/layout";
 import { reducer, AuthContext } from "./utils/auth";
 import RegistrationForm from "./pages/register/RegistrationForm";
@@ -18,6 +18,7 @@ import jwt_decode from "jwt-decode";
 import ReadRoles from './pages/admin/readRoles';
 import ReadUsers from './pages/admin/readUsers';
 import Activity from './pages/activity/Activity';
+import api from './utils/api'
 
 const authInitialState = {
     user: null,
@@ -28,8 +29,25 @@ const authInitialState = {
 
 function App() {
     const [state, dispatch] = useReducer(reducer, authInitialState);
+    const [ loading, setLoading ] = useState(false)
+    const [ info, setInfo ] = useState({})
+
+    function getInfo(){
+        try {
+            api.get("/config/info")
+            .then((response) => {
+                setInfo(response.data[0]);
+            })
+            .catch((error) => {
+            }).finally(() => setLoading(false));
+        } catch {
+
+        }
+    }
 
     useEffect(() => {
+        getInfo();
+
         if (localStorage.getItem('token') && localStorage.getItem('user')) {
             const token = JSON.parse(localStorage.getItem('token'));
             const user = JSON.parse(localStorage.getItem('user'));
@@ -82,8 +100,22 @@ function App() {
                             <div className={"header-wrap"}>
                                 <AppHeader />
                             </div>
+                            <div style={{ width: '100%', height: '15vh',  position: 'relative' }}>
+                                <img 
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                    }}
+                                    src={info.banner}
+                                    alt='Banner'
+                                />
+                            </div>
                             <Content className={"mainWrapper"}>
-                                <span> Info del sistema </span>
+                            <span> {info.motd} </span>
                                 <Routes>
                                     <Route path="/" exact element={<Forum />} />
                                     <Route path="/login" element={<Login />} />

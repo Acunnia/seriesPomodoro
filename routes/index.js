@@ -5,6 +5,7 @@ const topicController = require('./topic')
 const replyController = require('./reply')
 const statsController = require('./stats');
 const roleController = require('./role');
+const appConfigController = require('./appConfig')
 
 module.exports = {
     userController,
@@ -13,5 +14,6 @@ module.exports = {
     topicController,
     replyController,
     statsController,
-    roleController
+    roleController,
+    appConfigController
 };

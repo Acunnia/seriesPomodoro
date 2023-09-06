@@ -40,11 +40,22 @@ async function populateAdmin(){
 }
 
 async function populateConfig(){
-    return await AppConfig.insertMany([{}])
+    return await AppConfig.insertMany([{create_category: 3,
+    create_subcategory: 3,
+    edit_category: 3,
+    edit_subcategory: 3,
+    delete_category: 5,
+    delete_subcategory: 5,
+    edit_user: 5,
+    delete_user: 5,    
+    create_role: 5,
+    edit_role: 5,
+    delete_role: 5,
+    motd: "Wellcome to the seriesPomodoro forum",
+    banner: "https://i.imgur.com/N9GbszF.jpg"}])
 }
 
 async function dropConfigAndPopulate(){
-
 
     return populateConfig();
 }

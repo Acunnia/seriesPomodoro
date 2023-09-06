@@ -22,6 +22,7 @@ const Category = props => {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
         position: 'relative',
+        height: '150px'
 
     };
 

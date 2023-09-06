@@ -27,6 +27,7 @@ app.use('/api/topics', controllers.topicController);
 app.use('/api/reply', controllers.replyController);
 app.use('/api/stats', controllers.statsController);
 app.use('/api/roles', controllers.roleController);
+app.use('/api/config', controllers.appConfigController);
 
 
 // If no API routes
