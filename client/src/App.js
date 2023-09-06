@@ -19,6 +19,7 @@ import ReadRoles from './pages/admin/readRoles';
 import ReadUsers from './pages/admin/readUsers';
 import Activity from './pages/activity/Activity';
 import api from './utils/api'
+import ConfigForm from './pages/admin/configForm';
 
 const authInitialState = {
     user: null,
@@ -131,6 +132,7 @@ function App() {
                                             <Route path="/admin/cat" element={<ReadCategories />} />
                                             <Route path="/admin/role" element={<ReadRoles />} />
                                             <Route path="/admin/user" element={<ReadUsers />} />
+                                            <Route path="/admin/config" element={<ConfigForm />} />
                                         </>
                                     ) : null///TODO: añadir 404
                                 }
