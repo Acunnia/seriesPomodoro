@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Form, Input, Button, Slider, Alert } from 'antd';
+import { Form, Input, Button, Slider, Alert, message } from 'antd';
 import api from '../../utils/api'
 import { AuthContext } from '../../utils/auth';
 
@@ -9,8 +9,18 @@ const ConfigForm = () => {
   const { state } = useContext(AuthContext);
 
   const handleFormSubmit = (values) => {
-    // Lógica para enviar los datos al servidor/API
-    console.log(values);
+    try {
+        api.put('/config/edit',{values},{
+            headers: {
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'}
+        }).then(response => {
+            message.success("")
+        })
+    } catch {
+        console.log(values);
+    }
+    
   };
 
   useEffect(() => {

@@ -17,7 +17,15 @@ appConfigController.get('/info', (req, res) => {
 });
 
 appConfigController.put('/edit', passport.authenticate('jwt', {session: false}), (req, res) => {
-    
-})
+    const values = req.body.values;
+    try {
+        AppConfig.findOneAndUpdate({},values).then(() => {
+            res.status(200).json({msg: "Updated"})
+        })
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Failed to get info of subcategory.', err });
+    }}
+)
 
 module.exports = appConfigController

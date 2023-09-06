@@ -129,7 +129,7 @@ function App() {
                                     <Route path="/activity" element={<Activity />} />
                                     {state.isAuthenticated && state.admin_level === 5 ? (
                                         <>
-                                            <Route path="/admin/cat" element={<ReadCategories />} />
+                                            <Route path="/admin/:" element={<ReadCategories />} />
                                             <Route path="/admin/role" element={<ReadRoles />} />
                                             <Route path="/admin/user" element={<ReadUsers />} />
                                             <Route path="/admin/config" element={<ConfigForm />} />

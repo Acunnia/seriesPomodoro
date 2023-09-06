@@ -1,3 +1,4 @@
+require('dotenv/config');
 const AppConfig = require('../models/app-config.model');
 const Role = require('../models/role.model');
 const User = require('../models/user.model');
@@ -30,7 +31,7 @@ async function populateRoles(){
 
 async function populateAdmin(){
     const adminRole = await Role.findOne({name: "Admin"}).exec()
-    const adminUser = new User({username: "Admin", password: "defaultAdmin", email: "admin@newadmin.com", role: adminRole._id})
+    const adminUser = new User({username: "Admin", password: process.env.ADMIN_PASSWORD, email: process.env.ADMIN_MAIL, role: adminRole._id})
     adminUser.save().then(savedUser => {
         return Role.findOne(savedUser.role._id).then(role => {
             role.users.push(savedUser._id);
