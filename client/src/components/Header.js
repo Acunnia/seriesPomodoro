@@ -4,6 +4,7 @@ import {
     AppstoreOutlined,
     LoginOutlined,
     LogoutOutlined,
+    UserOutlined
 } from '@ant-design/icons';
 import './styles/Header.styles.css'
 import {NavLink, useNavigate} from "react-router-dom";
@@ -62,9 +63,21 @@ const AppHeader = () => {
             icon: <AppstoreOutlined />,
         },
         {
+            label: "Activity",
+            key: 'activity',
+            onClick: () => navigate("/activity"),
+            icon: <AppstoreOutlined />,
+        },
+        {
             label: <>{state.user && state.user.username.toString()}</>,
             key: 'welcome-user',
             children: [
+                {
+                    label: 'Profile',
+                    key:'profile',
+                    icon: <UserOutlined />,
+                    onClick: () => navigate(`/profile/${state.user.username}`)
+                },
                 {
                     label: 'Logout',
                     key: 'logout',

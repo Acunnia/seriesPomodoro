@@ -58,7 +58,7 @@ const Activity = props => {
               <span>
                 <UserAddOutlined style={iconStyle} />
                 Let's welcome our newest user,{' '}
-                <Link to="/">{activity.username}</Link>
+                <Link to={`/profile/${activity.username}`}>{activity.username}</Link>
               </span>
             </div>
           </div>
@@ -69,7 +69,7 @@ const Activity = props => {
             <div style={infoStyle}>
               <span>
                 <CommentOutlined style={iconStyle} />
-                <Link to="/">{activity.author.username}</Link> created a new
+                <Link to={`/profile/${activity.author.username}`}>{activity.author.username}</Link> created a new
                 topic:{' '}
                 <Link to={`/topic?id=${activity._id}`} >
                   {activity.title}
@@ -88,14 +88,14 @@ const Activity = props => {
             <div style={ postInfoStyle}>
               <span>
                 <MessageOutlined style={iconStyle} />
-                <Link to="/">{activity.author.username}</Link> posted a reply in
+                <Link to={`/profile/${activity.author.username}`}>{activity.author.username}</Link> posted a reply in
                 the topic{' '}
                 <Link to={`/topic?id=${activity.topic._id}`}>
                   {activity.topic.title}
                 </Link>
               </span>
             </div>
-            <Reply postData={activity} minimal notimestamp />
+            <Reply postData={activity} />
           </div>
         );
       default:
