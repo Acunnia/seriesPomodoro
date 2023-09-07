@@ -1,2 +1,2 @@
-Client_ID = 'dfbdsfbdsfb'
-Secret = 'asdvcsdvs'
+Client_ID = ''
+Secret = ''
