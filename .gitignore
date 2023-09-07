@@ -2,3 +2,4 @@
 .idea
 node_modules/
 build
+twitch/config.py
