@@ -38,5 +38,30 @@
   "devDependencies": {
     "concurrently": "^8.2.0",
     "nodemon": "^2.0.22"
-  }
+  },
+  "eslintConfig": {
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "rules": {
+        "brace-style": [
+            "error",
+            "stroustrup"
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "no-var": [
+            "off"
+        ],
+        "one-var": [
+            "off"
+        ]
+    }
+}
 }

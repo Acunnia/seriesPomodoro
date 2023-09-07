@@ -41,10 +41,10 @@ const Login = props => {
 
             <Form.Item
                 name="email"
-                label="Correo Electrónico"
+                label="Email"
                 rules={[
-                    { required: true, message: "Por favor ingresa un correo electrónico" },
-                    { type: "email", message: "Por favor ingresa un correo electrónico válido" },
+                    { required: true, message: "Pls provide a email" },
+                    { type: "email", message: "Please provide a valid email" },
                 ]}
             >
                 <Input />
@@ -52,10 +52,10 @@ const Login = props => {
 
             <Form.Item
                 name="password"
-                label="Contraseña"
+                label="Password"
                 rules={[
-                    { required: true, message: "Por favor ingresa una contraseña" },
-                    { min: 6, message: "La contraseña debe tener al menos 6 caracteres" },
+                    { required: true, message: "Please provide a password" },
+                    { min: 6, message: "The passworld must have atleast 6 characters long" },
                 ]}
             >
                 <Input.Password />
@@ -63,7 +63,7 @@ const Login = props => {
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={waiting}>
-                    Registrarse
+                    Login
                 </Button>
             </Form.Item>
         </Form>
