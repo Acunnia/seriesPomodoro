@@ -1,7 +1,10 @@
 require('dotenv/config');
+const { default: App } = require('../client/src/App');
 const AppConfig = require('../models/app-config.model');
 const Role = require('../models/role.model');
 const User = require('../models/user.model');
+const Category = require('../models/category.model')
+const Subcategory = require('../models/subcategory.model')
 
 async function checkDB() {
     
@@ -22,6 +25,11 @@ async function checkDB() {
         populateConfig();
     } else if (appConfig.length >> 1) {
         dropConfigAndPopulate();
+    }
+
+    const seriesSubcategory = await Subcategory.find({name: "Main Tracked Series"}).populate('category').exec()
+    if (seriesSubcategory.length === 0) {
+        populateCategories();
     }
 }
 
@@ -57,8 +65,20 @@ async function populateConfig(){
 }
 
 async function dropConfigAndPopulate(){
-
+    await AppConfig.deleteMany({})
     return populateConfig();
+}
+
+async function populateCategories(){
+    Category.insertMany([{
+        name: "Tracked Series",
+        description: "General discusion about series",
+    }]).then(savedCat => {
+        Subcategory.insertMany([{
+            name: "Main Tracked Series",
+            category: savedCat._id,
+        }])
+    })
 }
 
 module.exports = checkDB;

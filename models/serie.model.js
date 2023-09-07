@@ -7,7 +7,8 @@ const serieSchema = new mongoose.Schema({
     streamers: { type: [String], required: true },
     activa: { type: Boolean, required: true },
     fin: { type: Date },
-    inicio: { type: Date }
+    inicio: { type: Date },
+    relatedTopic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic'}
 }, { collection: 'series' });
 
 const Serie = mongoose.model("Serie", serieSchema);
