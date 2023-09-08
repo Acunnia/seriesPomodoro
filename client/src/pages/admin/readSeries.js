@@ -1,21 +1,45 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Modal, Space, Table } from "antd";
+import { Button, Modal, Space, Table, Alert } from "antd";
 import api from "../../utils/api";
 import RoleForm from "./RoleForm";
 import { AuthContext } from "../../utils/auth";
+import SerieForm from "./serieForm";
+import TWITCH from "../../utils/clientConfig";
 
 export default function ReadSeries() {
   const { state } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [series, setSeries] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRole, setSelectedSerie] = useState(null);
+  const [selectedSerie, setSelectedSerie] = useState(null);
+  const [accessToken, setAccessToken] = useState("");
 
   const [mode, setMode] = useState("create");
 
   useEffect(() => {
     fetchSeries();
   }, []);
+
+  const obtenerAccessToken = async () => {
+    try {
+      const response = await fetch("https://id.twitch.tv/oauth2/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `client_id=${TWITCH.client}&client_secret=${TWITCH.secret}&grant_type=client_credentials`,
+      });
+
+      const data = await response.json();
+      if (data.access_token) {
+        setAccessToken(data.access_token); // Guarda el token de acceso en el estado
+      } else {
+        console.error("No se pudo obtener el token de acceso.");
+      }
+    } catch (error) {
+      console.error("Error al obtener el token de acceso:", error);
+    }
+  };
 
   function searchUser(nick) {
     console.log("Buscando.... ", nick);
@@ -131,13 +155,29 @@ export default function ReadSeries() {
       <Table columns={columns} dataSource={series}></Table>
 
       <Modal
-        title={selectedRole ? "Edit Role" : "Create Role"}
+        title={selectedSerie ? "Edit Role" : "Create Role"}
         open={isModalVisible}
         onCancel={handleModalCancel}
         footer={null}
       >
-        <RoleForm roletoEdit={selectedRole} onSave={handleSave} />
+        <SerieForm
+          serietoEdit={selectedSerie}
+          onSave={handleSave}
+          accessToken={accessToken}
+        />
       </Modal>
+      {accessToken ? (
+        <Alert
+          message="Token de acceso disponible"
+          description="Tienes un token de acceso válido."
+          type="success"
+          showIcon
+        />
+      ) : (
+        <Button type="primary" onClick={obtenerAccessToken}>
+          Obtener Token de Acceso
+        </Button>
+      )}
     </div>
   );
 }

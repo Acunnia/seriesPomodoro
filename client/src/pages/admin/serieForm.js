@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, DatePicker, Checkbox, Select } from "antd";
+import TWITCH from "../../utils/clientConfig";
 
 const { Option } = Select;
 
-const SerieForm = ({ serietoEdit, onSave }) => {
+const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
   const [categoriaID, setCategoriaID] = useState("");
   const [topics, setTopics] = useState([]);
+  const [filteredTopics, setFilteredTopics] = useState([]);
   const [form] = Form.useForm();
+  const [streamers, setStreamers] = useState([]);
+  const [streamerResults, setStreamerResults] = useState([]);
+  const [verifiedStreamers, setVerifiedStreamers] = useState([]);
 
   useEffect(() => {
     // Simula la carga inicial de los topics desde la API o tu fuente de datos
     const initialTopics = [
       { _id: "1", name: "Topic 1" },
-      { _id: "2", name: "Topic 2" },
-      { _id: "3", name: "Topic 3" },
+      { _id: "2", name: "Tortilla" },
+      { _id: "3", name: "Cosa" },
       // Agrega más topics según sea necesario
     ];
 
     setTopics(initialTopics);
   }, []);
 
-  const onFinish = (values) => {
-    console.log("Formulario enviado:", values);
-  };
+  const onFinish = (values) => {};
 
   // Función para obtener el ID de la categoría desde la API de Twitch
   const obtenerCategoriaID = async () => {
@@ -34,8 +37,8 @@ const SerieForm = ({ serietoEdit, onSave }) => {
         {
           method: "GET",
           headers: {
-            "Client-ID": "TU_CLIENT_ID", // Reemplaza con tu propio Client-ID de Twitch
-            Authorization: "Bearer TU_ACCESS_TOKEN", // Reemplaza con tu propio token de acceso de Twitch
+            "Client-ID": TWITCH.client, // Reemplaza con tu propio Client-ID de Twitch
+            Authorization: `Bearer ${accessToken}`, // Usar el token de acceso obtenido
           },
         }
       );
@@ -56,10 +59,67 @@ const SerieForm = ({ serietoEdit, onSave }) => {
   };
 
   const handleTopicSearch = (value) => {
-    const filteredTopics = topics.filter((topic) =>
-      topic.name.toLowerCase().includes(value.toLowerCase())
+    var filteredTopics = [];
+    if (value !== "") {
+      filteredTopics = topics.filter((topic) =>
+        topic.name.toLowerCase().includes(value.toLowerCase())
+      );
+    } else {
+      filteredTopics = topics;
+    }
+    setFilteredTopics(filteredTopics);
+  };
+
+  const handleStreamerChange = async (values) => {
+    // Filtrar streamers nuevos que aún no se han verificado
+    const newStreamers = values.filter(
+      (streamer) => !streamers.includes(streamer)
     );
-    setTopics(filteredTopics);
+
+    // Verificar la validez de los nuevos streamers
+    if (newStreamers.length > 0) {
+      const verifiedResults = await verificarStreamers(newStreamers);
+
+      // Actualizar la lista de streamers y los resultados de la verificación
+      setStreamers([
+        ...streamers,
+        ...verifiedResults.map((result) => result.username),
+      ]);
+      setVerifiedStreamers([...verifiedStreamers, ...verifiedResults]);
+    }
+  };
+
+  const verificarStreamers = async (streamersToVerify) => {
+    const verifiedStreamers = [];
+
+    for (const streamer of streamersToVerify) {
+      try {
+        console.log("Consultando, ", streamer);
+        const response = await fetch(
+          `https://api.twitch.tv/helix/users?login=${streamer}`,
+          {
+            method: "GET",
+            headers: {
+              "Client-ID": TWITCH.client,
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        if (data.data && data.data.length > 0) {
+          // El streamer es válido
+          verifiedStreamers.push({ username: streamer, valid: true });
+        } else {
+          // El streamer no es válido
+          verifiedStreamers.push({ username: streamer, valid: false });
+        }
+      } catch (error) {
+        console.error("Error al verificar el streamer:", error);
+      }
+    }
+
+    return verifiedStreamers;
   };
 
   return (
@@ -95,9 +155,31 @@ const SerieForm = ({ serietoEdit, onSave }) => {
       >
         <Input />
       </Form.Item>
+      <Button type="default" onClick={obtenerCategoriaID}>
+        Obtener Categoria ID
+      </Button>
 
       <Form.Item label="Categoría ID" name="categoriaID">
         <Input disabled />
+      </Form.Item>
+
+      <Form.Item label="Streamers" name="streamers">
+        <Select
+          mode="tags"
+          placeholder="Añadir streamers"
+          onChange={handleStreamerChange}
+          tokenSeparators={[","]}
+        >
+          {verifiedStreamers.map((result) => (
+            <Option
+              key={result.username}
+              value={result.username}
+              style={{ backgroundColor: result.valid ? "green" : "red" }}
+            >
+              {result.username}
+            </Option>
+          ))}
+        </Select>
       </Form.Item>
 
       <Form.Item label="Activa" name="activa" valuePropName="checked">
@@ -119,7 +201,7 @@ const SerieForm = ({ serietoEdit, onSave }) => {
           filterOption={false}
           onSearch={handleTopicSearch}
         >
-          {topics.map((topic) => (
+          {filteredTopics.map((topic) => (
             <Option key={topic._id} value={topic._id}>
               {topic.name}
             </Option>
@@ -130,9 +212,6 @@ const SerieForm = ({ serietoEdit, onSave }) => {
       <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
         <Button type="primary" htmlType="submit">
           Enviar
-        </Button>
-        <Button type="default" onClick={obtenerCategoriaID}>
-          Obtener Categoria ID
         </Button>
       </Form.Item>
     </Form>
