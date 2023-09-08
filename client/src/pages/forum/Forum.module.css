@@ -1,20 +1,24 @@
-.main-forum{
+.ForumWrapper{
     width: 100%;
-    padding: 0 24px;
-    background-color: var(--bg-primary);
+    padding-top: 10%;
 }
 
-.category-container{
+.ForumCategoryList{
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     height: 100%;
-    margin: 1em auto;
+    margin: auto;
     display: grid;
     max-width: var(--d-max-width);
     column-gap: 1em;
-    padding: 1em 0px;
 }
 
 .hoverable-table tbody tr:hover {
     cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .ForumCategoryList {
+        grid-template-columns: 1fr; /* Cambiar a 1 columna */
+    }
 }

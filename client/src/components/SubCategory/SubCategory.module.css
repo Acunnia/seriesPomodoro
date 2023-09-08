@@ -1,0 +1,17 @@
+.SubCategoryBox{
+    box-sizing: border-box;
+    border: solid 1px rgb(49,49,49);
+    background: rgb(17, 17, 17);
+    border-left: solid rgb(0,136,204) 3px;
+    border-radius: 3px;
+    break-inside: avoid;
+    position: relative;
+    margin: 0px 0px 1em;
+    padding: 1em;
+    width: 100%;
+    cursor: pointer;
+}
+
+.SubCategoryName{
+    font-size: 30px;
+}

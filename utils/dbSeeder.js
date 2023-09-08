@@ -1,5 +1,4 @@
 require('dotenv/config');
-const { default: App } = require('../client/src/App');
 const AppConfig = require('../models/app-config.model');
 const Role = require('../models/role.model');
 const User = require('../models/user.model');
@@ -70,15 +69,29 @@ async function dropConfigAndPopulate(){
 }
 
 async function populateCategories(){
-    Category.insertMany([{
-        name: "Tracked Series",
-        description: "General discusion about series",
-    }]).then(savedCat => {
-        Subcategory.insertMany([{
-            name: "Main Tracked Series",
-            category: savedCat._id,
-        }])
-    })
+    try {
+        const savedCat = await Category.create({
+          name: "Tracked Series",
+          description: "General discusion about series",
+        });
+    
+        const createdSub = await Subcategory.create({
+          name: "Main Tracked Series",
+          category: savedCat._id,
+        });
+    
+        const updatedCategory = await Category.findByIdAndUpdate(
+          savedCat._id,
+          {
+            $push: { subcategories: createdSub._id },
+          },
+          { new: true }
+        );
+    
+        console.log(updatedCategory);
+      } catch (error) {
+        console.error(error);
+      }
 }
 
 module.exports = checkDB;

@@ -1,6 +1,6 @@
 import React from 'react';
-import "./styles/Category.styles.css"
 import { useNavigate } from 'react-router-dom';
+import styles from './SubCategory.module.css'
 
 const Category = props => {
     const navigate = useNavigate();
@@ -17,12 +17,9 @@ const Category = props => {
     }
 
     return (
-        <div onClick={goToSubCategory} className="category-box">
-            <div className="category-name">
+        <div onClick={goToSubCategory} className={styles.SubCategoryBox}>
+            <div className={styles.SubCategoryName}>
                 {props.data.name}
-            </div>
-            <div className="category-desc">
-                {props.data.description}
             </div>
         </div>
     );

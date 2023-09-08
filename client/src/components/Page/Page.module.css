@@ -1,0 +1,22 @@
+.Page {
+    min-height: 500px;
+  }
+  
+  .MainLayout {
+    padding: 0 10%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .HeaderImage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-image: url("https://i.imgur.com/N9GbszF.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: 50%;
+    height: 190px;
+    width: 100%;
+  }

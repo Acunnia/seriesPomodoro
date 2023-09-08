@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import "./styles/Category.styles.css"
+import styles from  "./Category.module.css"
 import { useNavigate } from 'react-router-dom';
 
 const Category = props => {
@@ -40,28 +40,28 @@ const Category = props => {
     };
 
     return (
-        <div
-            onClick={goToCategory}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="category-box"
-            style={categoryStyle}
-        >
-            <div style={hoverStyle}></div>
-            <div className="category-name">
-                {props.data.name}
+            <div
+                onClick={goToCategory}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={styles.CategoryInfo}
+                style={categoryStyle}
+            >
+                <div style={hoverStyle}></div>
+                <div className={styles.CategoryName}>
+                    {props.data.name}
+                </div>
+                <div className="category-desc">
+                    {props.data.description}
+                </div>
+                <div className="subcategory-list">
+                    {props.data.subcategories.map(subcategory => (
+                        <div className="subcategory" key={subcategory._id}>
+                            {subcategory.name}
+                        </div>
+                    ))}
+                </div>
             </div>
-            <div className="category-desc">
-                {props.data.description}
-            </div>
-            <div className="subcategory-list">
-                {props.data.subcategories.map(subcategory => (
-                    <div className="subcategory" key={subcategory._id}>
-                        {subcategory.name}
-                    </div>
-                ))}
-            </div>
-        </div>
     );
 };
 

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Skeleton, Row, Col} from 'antd';
 import api from '../../utils/api';
-import Category from '../../components/Category'
+import Category from '../../components/Category/Category'
+import Page from '../../components/Page/Page';
+import styles from  './Forum.module.css'
 
 const Forum = () => {
     const [loading, setLoading] = useState(false)
@@ -23,8 +25,9 @@ const Forum = () => {
     };
 
     return (
-        <div className={"main-forum"}>
-                <div className="category-container">
+        <Page>
+            <div className={styles.ForumWrapper}>
+                <div className={styles.ForumCategoryList}>
                     {loading ? (
                         <div>
                             <Skeleton active />
@@ -39,7 +42,8 @@ const Forum = () => {
                         })
                     )}
                 </div>
-        </div>
+            </div>
+        </Page>
     );
 };
 

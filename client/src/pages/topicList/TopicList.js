@@ -3,9 +3,11 @@ import {Link, useSearchParams, useLocation, useNavigate} from "react-router-dom"
 import {Skeleton, Modal, Button, Pagination, Table, Typography, Divider } from "antd";
 import api from "../../utils/api";
 import {FormOutlined} from "@ant-design/icons";
-import SubCategory from "../../components/SubCategory";
+import SubCategory from "../../components/SubCategory/SubCategory";
 import {AuthContext} from "../../utils/auth";
-import './TopicList.styles.css'
+import Page from '../../components/Page/Page';
+import styles from './TopicList.module.css'
+import Category from '../../components/Category/Category';
 
 const { Text } = Typography;
 
@@ -169,30 +171,31 @@ const TopicList = props => {
     ];
 
     return (
-        <div>
-            {contentLoading ? (
-                <div>
-                    <Skeleton active />
-                </div>
-            ) : (
-                <div>
-                    <span>Now on: {ubication}</span>
-                </div>
-            )}
-            <div className="category-container">
+        <Page>
+            <div className={styles.CategoryMain}>
                 {contentLoading ? (
                     <div>
                         <Skeleton active />
-                        <Skeleton active />
-                        <Skeleton active />
                     </div>
                 ) : (
-                    subcategories.map(subcategory => {
-                        return (
-                            <SubCategory data={subcategory} key={subcategory._id} />
-                        );
-                    })
+                    <div>
+                        <span>Now on: {ubication}</span>
+                    </div>
                 )}
+                <div className={styles.TopicListContainers}>
+                    {contentLoading ? (
+                        <div>
+                            <Skeleton active />
+                            <Skeleton active />
+                            <Skeleton active />
+                        </div>
+                    ) : (
+                        subcategories.map(subcategory => {
+                            return (
+                                <SubCategory data={subcategory} key={subcategory._id} />
+                            );
+                        })
+                    )}
             </div>
             <div>
                 {isSubcategory && (
@@ -216,11 +219,12 @@ const TopicList = props => {
                     onRow={(topic) => ({
                         onClick: () => navigate(`/topic?id=${topic._id}`)
                     })}
-                    className="hoverable-table"
-                />
-                {pages.totalPages > 1 && pagination}
+                    className={styles.HoverableTable}
+                    />
+                    {pages.totalPages > 1 && pagination}
+                </div>
             </div>
-        </div>
+        </Page>
     );
 };
 
