@@ -17,7 +17,12 @@ export default function ReadSeries() {
   const [mode, setMode] = useState("create");
 
   useEffect(() => {
-    fetchSeries();
+    console.log("effect read");
+    try {
+      fetchSeries();
+    } catch {
+      console.log("Error fetching series");
+    }
   }, []);
 
   const obtenerAccessToken = async () => {
@@ -41,24 +46,21 @@ export default function ReadSeries() {
     }
   };
 
-  function searchUser(nick) {
-    console.log("Buscando.... ", nick);
-  }
-
   const fetchSeries = () => {
     setLoading(true);
     api
       .get("/series")
       .then((response) => {
-        console.log(response);
-        setSeries(response.data.roles);
+        setLoading(false);
+        setSeries(response.data.series);
       })
-      .catch((error) => {})
+      .catch((error) => {
+        console.log(error);
+      })
       .finally(() => setLoading(false));
   };
 
   const onDelete = (id) => {
-    //TODO: Modal de confirmacion de eliminacion
     api
       .delete(`/series/delete/${id}`, {
         headers: {
@@ -76,6 +78,7 @@ export default function ReadSeries() {
   };
 
   const handleEdit = (data) => {
+    console.log("editandio");
     setMode("edit");
     setSelectedSerie(data);
     setIsModalVisible(true);
@@ -89,7 +92,7 @@ export default function ReadSeries() {
 
   const handleModalCancel = () => {
     setIsModalVisible(false);
-    setSelectedSerie({});
+    setSelectedSerie(null);
   };
 
   const handleSave = (data) => {
@@ -97,11 +100,7 @@ export default function ReadSeries() {
     setSelectedSerie(null);
     if (mode === "create") {
       api
-        .post("/series/create", {
-          name: data.name,
-          description: data.description,
-          image: data.image,
-        })
+        .post("/series/create", data)
         .then((response) => {
           fetchSeries();
         })
@@ -132,16 +131,16 @@ export default function ReadSeries() {
     },
     {
       title: "Categoria",
-      dataIndex: "admin_level",
-      key: "admin_level",
+      dataIndex: "categoria",
+      key: "categoria",
     },
     {
       title: "Action",
       key: "action",
-      render: (_, role) => (
+      render: (_, serie) => (
         <Space size="middle">
-          <button onClick={() => handleEdit(role)}>Edit {role.name}</button>
-          <button onClick={() => onDelete(role._id)}>Delete</button>
+          <button onClick={() => handleEdit(serie)}>Edit {serie.nombre}</button>
+          <button onClick={() => onDelete(serie._id)}>Delete</button>
         </Space>
       ),
     },
@@ -152,10 +151,14 @@ export default function ReadSeries() {
       <Button type="primary" onClick={handleCreate}>
         Create Role
       </Button>
-      <Table columns={columns} dataSource={series}></Table>
+      <Table
+        columns={columns}
+        rowKey={(serie) => serie._id}
+        dataSource={series}
+      ></Table>
 
       <Modal
-        title={selectedSerie ? "Edit Role" : "Create Role"}
+        title={selectedSerie ? "Edit Serie" : "Create Serie"}
         open={isModalVisible}
         onCancel={handleModalCancel}
         footer={null}

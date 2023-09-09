@@ -45,6 +45,17 @@ topicController.get('/',async (req, res) => {
     }
 })
 
+topicController.get('/all',async (req, res) => {
+    try {
+        const result = await Topic.find().exec()
+
+        return res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Failed to get info of topic.', err });
+    }
+})
+
 topicController.post('/create', passport.authenticate('jwt', {session: false}), (req, res) => {
     const { title, message, author, subcategory, description } = req.body;
 

@@ -1,31 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, DatePicker, Checkbox, Select } from "antd";
 import TWITCH from "../../utils/clientConfig";
+import api from "../../utils/api";
+import dayjs from "dayjs";
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
-  const [categoriaID, setCategoriaID] = useState("");
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [form] = Form.useForm();
   const [streamers, setStreamers] = useState([]);
-  const [streamerResults, setStreamerResults] = useState([]);
   const [verifiedStreamers, setVerifiedStreamers] = useState([]);
+  const dateFormat = "YYYY/MM/DD";
 
   useEffect(() => {
-    // Simula la carga inicial de los topics desde la API o tu fuente de datos
-    const initialTopics = [
-      { _id: "1", name: "Topic 1" },
-      { _id: "2", name: "Tortilla" },
-      { _id: "3", name: "Cosa" },
-      // Agrega más topics según sea necesario
-    ];
-
-    setTopics(initialTopics);
+    console.log("effect form");
+    getTopics();
+    if (serietoEdit) {
+      console.log(
+        serietoEdit,
+        "inicio ",
+        dayjs(serietoEdit.inicio, dateFormat),
+        "fin ",
+        dayjs(serietoEdit.fin, dateFormat)
+      );
+      const fechas = [
+        dayjs(serietoEdit.inicio, dateFormat),
+        dayjs(serietoEdit.fin, dateFormat),
+      ];
+      form.setFieldsValue({ ...serietoEdit, fechas });
+    }
   }, []);
 
-  const onFinish = (values) => {};
+  function getTopics() {
+    api.get("/topics/all").then((result) => {
+      setTopics(result.data);
+      setFilteredTopics(filteredTopics);
+    });
+  }
+
+  const onFinish = (values) => {
+    values.inicio = values.fechas[0];
+    values.fin = values.fechas[1];
+
+    onSave(values);
+    form.resetFields();
+  };
 
   // Función para obtener el ID de la categoría desde la API de Twitch
   const obtenerCategoriaID = async () => {
@@ -45,10 +67,7 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
 
       const data = await response.json();
       if (data.data && data.data.length > 0) {
-        // Obtener el ID de la primera coincidencia (asumiendo que la API devuelve resultados)
         const id = data.data[0].id;
-        setCategoriaID(id);
-        // Establecer el valor en el campo de formulario
         form.setFieldsValue({ categoriaID: id });
       } else {
         console.error("No se encontró ninguna categoría con ese nombre.");
@@ -62,7 +81,7 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
     var filteredTopics = [];
     if (value !== "") {
       filteredTopics = topics.filter((topic) =>
-        topic.name.toLowerCase().includes(value.toLowerCase())
+        topic.title.toLowerCase().includes(value.toLowerCase())
       );
     } else {
       filteredTopics = topics;
@@ -108,10 +127,8 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
 
         const data = await response.json();
         if (data.data && data.data.length > 0) {
-          // El streamer es válido
           verifiedStreamers.push({ username: streamer, valid: true });
         } else {
-          // El streamer no es válido
           verifiedStreamers.push({ username: streamer, valid: false });
         }
       } catch (error) {
@@ -125,8 +142,8 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
   return (
     <Form
       form={form}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
+      labelCol={{ span: 7 }}
+      wrapperCol={{ span: 11 }}
       layout="horizontal"
       onFinish={onFinish}
     >
@@ -186,12 +203,8 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
         <Checkbox />
       </Form.Item>
 
-      <Form.Item label="Fecha de Inicio" name="inicio">
-        <DatePicker />
-      </Form.Item>
-
-      <Form.Item label="Fecha de Fin" name="fin">
-        <DatePicker />
+      <Form.Item label="Inicio" name="fechas">
+        <RangePicker />
       </Form.Item>
 
       <Form.Item label="Tema Relacionado" name="relatedTopic">
@@ -203,7 +216,7 @@ const SerieForm = ({ serietoEdit, onSave, accessToken }) => {
         >
           {filteredTopics.map((topic) => (
             <Option key={topic._id} value={topic._id}>
-              {topic.name}
+              {topic.title}
             </Option>
           ))}
         </Select>
