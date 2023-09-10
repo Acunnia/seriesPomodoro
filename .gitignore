@@ -1,8 +1,7 @@
 .env
 .idea
-node_modules/
-build
-/twitch/config.py
+app/node_modules/
+app/build
 twitch/config.py
-client/src/utils/clientConfig.js
+app/client/src/utils/clientConfig.js
 twitch/__pycache__

@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  node-app:
+    build: .
+    image: node-app
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27018/seriePomodoro
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/src
+    networks:
+      - node-network
+
+  mongodb:
+    image: mongo:6-jammy
+    command: mongod --port 27018
+    ports:
+      - "27018:27018"
+    volumes:
+      - dbdata6:/data/db
+    networks:
+      - node-network
+
+volumes:
+  dbdata6:
+
+networks:
+  node-network:
+    driver: bridge
