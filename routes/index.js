@@ -7,6 +7,7 @@ const statsController = require("./stats");
 const roleController = require("./role");
 const appConfigController = require("./appConfig");
 const serieController = require("./serie");
+const tracksController = require("./tracks");
 
 module.exports = {
   userController,
@@ -18,4 +19,5 @@ module.exports = {
   roleController,
   appConfigController,
   serieController,
+  tracksController,
 };

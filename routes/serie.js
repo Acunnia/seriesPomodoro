@@ -5,7 +5,6 @@ const Serie = require("../models/serie.model");
 
 serieController.get("/", (req, res) => {
   Serie.find().then((series) => {
-    console.log(series);
     res.status(200).json({ series });
   });
 });

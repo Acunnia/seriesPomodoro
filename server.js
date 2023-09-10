@@ -28,6 +28,7 @@ app.use("/api/stats", controllers.statsController);
 app.use("/api/roles", controllers.roleController);
 app.use("/api/config", controllers.appConfigController);
 app.use("/api/series", controllers.serieController);
+app.use("/api/tracks", controllers.tracksController);
 
 // If no API routes
 // are hit, send the build version of the React client

@@ -14,8 +14,8 @@ def startConn(host,port):
     if Conexion.conn is None:
         print('Estableciendo conexion con base de datos ')
         Conexion.conn = pymongo.MongoClient(Conexion.URI)
-        Conexion.colSeries = Conexion.conn['seriesTrack']['series']
-        Conexion.colTracks = Conexion.conn['seriesTrack']['tracks']
+        Conexion.colSeries = Conexion.conn['seriePomodoro']['series']
+        Conexion.colTracks = Conexion.conn['seriePomodoro']['tracks']
     return Conexion.conn
 
 def saveSerie(doc):

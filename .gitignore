@@ -5,3 +5,4 @@ build
 /twitch/config.py
 twitch/config.py
 client/src/utils/clientConfig.js
+twitch/__pycache__

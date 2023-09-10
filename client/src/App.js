@@ -21,6 +21,7 @@ import Activity from "./pages/activity/Activity";
 import api from "./utils/api";
 import ConfigForm from "./pages/admin/configForm";
 import ReadSeries from "./pages/admin/readSeries";
+import MainCharts from "./pages/mainCharts/mainCharts";
 
 const authInitialState = {
   user: null,
@@ -114,6 +115,7 @@ function App() {
                   <Route path="/newtopic" element={<TopicForm />} />
                   <Route path="/profile/:name" element={<Profile />} />
                   <Route path="/activity" element={<Activity />} />
+                  <Route path="/graphs" element={<MainCharts />} />
                   {
                     state.isAuthenticated && state.admin_level === 5 ? (
                       <>

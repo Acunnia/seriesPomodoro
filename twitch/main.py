@@ -4,13 +4,8 @@ import time
 import consultaTwitch as twitch
 from datetime import datetime
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-m', "--modo", help='Selecciona el modo. 1 -> Series activas', default=3, type=int)
-args = parser.parse_args()
-modo = args.modo
-
 conexion.startConn('localhost', 26016)
+
 
 
 def consultaDatos():
@@ -33,7 +28,7 @@ def consultaDatos():
         else:
             run = False
 
-    while True:
+while True:
         consultaDatos()
         time.sleep(600)
     #quit()
