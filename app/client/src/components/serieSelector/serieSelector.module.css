@@ -1,0 +1,6 @@
+.selected {
+    font-weight: bold; /* Hace que el texto sea más grueso */
+    color: #3ca5e7;
+    font-size: 16px; /* Cambia el tamaño del texto */
+    border: 2px solid #f39c12;
+}

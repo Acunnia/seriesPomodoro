@@ -1,66 +1,56 @@
 import React, { useEffect, useState } from "react";
+import { Table, Button } from "antd";
 import api from "../../utils/api";
-
-const Serie = (props) => (
-  <tr className={"list-item"}>
-    <td className={"item_cell"}>
-      <button
-        className={"btnn_list"}
-        onClick={() => {
-          props.selectedSerie(props.serie._id);
-        }}
-      >
-        {props.serie.nombre}
-      </button>
-    </td>
-  </tr>
-);
+import styles from "./serieSelector.module.css";
 
 export default function SerieList({ setSerieID }) {
   const [series, setSeries] = useState([]);
+  const [selectedSerie, setSelectedSerie] = useState(null);
 
   useEffect(() => {
     getSeries();
-    return;
-  }, [series.length]);
+  }, []);
 
   async function getSeries() {
     try {
-      api.get("/series").then((result) => {
-        console.log(result.data);
-        setSeries(result.data.series);
-      });
-    } catch (err) {}
+      const response = await api.get("/series");
+      setSeries(response.data.series);
+    } catch (err) {
+      console.error("Error fetching series:", err);
+    }
   }
+
+  const columns = [
+    {
+      title: "Tracked series",
+      dataIndex: "nombre",
+      key: "nombre",
+      render: (text, record) => (
+        <Button
+          className={`btnn_list ${
+            record._id === selectedSerie ? styles.selected : ""
+          }`}
+          onClick={() => selectSerie(record._id)}
+        >
+          {text}
+        </Button>
+      ),
+    },
+  ];
 
   function selectSerie(id) {
     setSerieID(id);
+    setSelectedSerie(id);
   }
 
-  function serieList() {
-    return series.map((serie) => {
-      return (
-        <Serie
-          serie={serie}
-          selectedSerie={() => selectSerie(serie._id)}
-          key={serie._id}
-        />
-      );
-    });
-  }
-
-  // This following section will display the table with the records of individuals.
   return (
     <div>
-      <h3>Serie List</h3>
-      <table className="table table-striped" style={{ marginTop: 5 }}>
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>{serieList()}</tbody>
-      </table>
+      <Table
+        dataSource={series}
+        columns={columns}
+        pagination={false}
+        rowKey="_id"
+      />
     </div>
   );
 }
