@@ -52,6 +52,12 @@ replyController.post(
         return res.status(404).json({ error: "Topic not found" });
       }
 
+      if (foundTopic.isClosed) {
+        return res
+          .status(403)
+          .json({ message: "Canot reply on closed topics" });
+      }
+
       const newReply = new Reply({
         message: message,
         author: userId,

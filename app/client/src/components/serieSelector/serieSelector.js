@@ -3,7 +3,7 @@ import { Table, Button } from "antd";
 import api from "../../utils/api";
 import styles from "./serieSelector.module.css";
 
-export default function SerieList({ setSerieID }) {
+export default function SerieList({ setSerieID, setTopicID }) {
   const [series, setSeries] = useState([]);
   const [selectedSerie, setSelectedSerie] = useState(null);
 
@@ -30,7 +30,7 @@ export default function SerieList({ setSerieID }) {
           className={`btnn_list ${
             record._id === selectedSerie ? styles.selected : ""
           }`}
-          onClick={() => selectSerie(record._id)}
+          onClick={() => selectSerie(record._id, record.relatedTopic)}
         >
           {text}
         </Button>
@@ -38,7 +38,8 @@ export default function SerieList({ setSerieID }) {
     },
   ];
 
-  function selectSerie(id) {
+  function selectSerie(id, relatedTopic) {
+    setTopicID(relatedTopic)
     setSerieID(id);
     setSelectedSerie(id);
   }

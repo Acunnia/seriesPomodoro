@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Component } from "react";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router-dom";
+import { Button } from "antd";
 import Plot from "../../../node_modules/react-plotly.js/react-plotly";
 import api from "../../utils/api";
 import { useRef } from "react";
 
-export default function Chart({ serieID }) {
+export default function Chart({ serieID, topicID }) {
   const [avgViews, setAvgViews] = useState([]);
   const [data, setData] = useState([]);
   const [mapedData, setMapedData] = useState([]);
@@ -15,7 +16,6 @@ export default function Chart({ serieID }) {
     if (serieID) {
       fetchData();
     }
-
     return;
   }, [serieID]);
 
@@ -66,7 +66,12 @@ export default function Chart({ serieID }) {
 
   return (
     <div>
-      <h1>Graficos </h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h1 style={{ flex: 1 }}>Graficos</h1>
+        <Link to={`/topic?id=${topicID}`}>
+          <Button type="primary">Ir al hilo de la serie</Button>
+        </Link>
+      </div>
       <div ref={chartRef}>
         <Plot
           data={data}

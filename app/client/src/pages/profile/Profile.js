@@ -29,7 +29,7 @@ const UserPublicProfile = () => {
 
   const handleBanUser = () => {
     api
-      .delete(`/user/${user._id}`, {
+      .delete(`/users/${user._id}`, {
         headers: {
           Authorization: `Bearer ${state.token}`,
         },

@@ -5,6 +5,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   UserOutlined,
+  BarChartOutlined,
 } from "@ant-design/icons";
 import "./styles/Header.styles.css";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +44,12 @@ const AppHeader = () => {
       icon: <AppstoreOutlined />,
     },
     {
+      label: "Graphs",
+      key: "graphs",
+      onClick: () => navigate("/graphs"),
+      icon: <BarChartOutlined />,
+    },
+    {
       label: "Login",
       key: "login",
       icon: <LoginOutlined />,
@@ -67,6 +74,12 @@ const AppHeader = () => {
       key: "activity",
       onClick: () => navigate("/activity"),
       icon: <AppstoreOutlined />,
+    },
+    {
+      label: "Graphs",
+      key: "graphs",
+      onClick: () => navigate("/graphs"),
+      icon: <BarChartOutlined />,
     },
     {
       label: <>{state.user && state.user.username.toString()}</>,

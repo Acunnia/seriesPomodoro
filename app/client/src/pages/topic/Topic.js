@@ -7,6 +7,7 @@ import {
   Typography,
   Skeleton,
   Pagination,
+  Button,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -110,6 +111,51 @@ const Topic = (props) => {
       });
   }
 
+  function handleCerrarTema(commentData) {
+    setContentLoading(true);
+    api
+      .delete(`/topics/${id}`, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+      .then((result) => {
+        setContentLoading(false);
+        topic.isClosed = true;
+        setTopic(topic);
+        message.success("Closed");
+      })
+      .catch((err) => {
+        setContentLoading(false);
+        message.error("Something went wrong");
+      });
+  }
+
+  function handleReabrirTema() {
+    setContentLoading(true);
+    api
+      .post(
+        `/topics/reopen`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((result) => {
+        setContentLoading(false);
+        topic.isClosed = false;
+        setTopic(topic);
+        message.success("Opened");
+      })
+      .catch((err) => {
+        setContentLoading(false);
+        message.error("Something went wrong");
+      });
+  }
+
   const pagination = (
     <div>
       <Pagination
@@ -134,10 +180,28 @@ const Topic = (props) => {
         </div>
       ) : (
         <>
-        <br></br>
+          <br></br>
           <Card>
             <Meta title={topic.title} description={topic.description} />
             <p>Created by: {topic.author.username}</p>
+            {topic.isClosed ? (
+              <>
+                <p style={{ color: "red" }}>Tema cerrado</p>
+                {state && state.admin_level >= 1 && (
+                  <Button type="primary" onClick={handleReabrirTema}>
+                    Reabrir Tema asfvsadfv
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                {state && state.admin_level >= 1 && (
+                  <Button danger onClick={handleCerrarTema}>
+                    Cerrar Tema
+                  </Button>
+                )}
+              </>
+            )}
           </Card>
           <Divider />
           {pages.totalPages > 1 && pagination}
@@ -153,11 +217,17 @@ const Topic = (props) => {
           <Divider />
           {pages.totalPages > 1 && pagination}
           {userLogued ? (
-            <CommentForm
-              topicId={id}
-              userId={userLogued.user.id}
-              onSubmit={handleNewReply}
-            />
+            topic.isClosed ? (
+              <Card>
+                <p>Este tema está cerrado y no se pueden agregar respuestas.</p>
+              </Card>
+            ) : (
+              <CommentForm
+                topicId={id}
+                userId={userLogued.user.id}
+                onSubmit={handleNewReply}
+              />
+            )
           ) : (
             <Card>
               <p>Regístrate o inicia sesión para responder a este hilo.</p>

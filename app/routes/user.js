@@ -76,6 +76,12 @@ userController.post("/login", (req, res) => {
         return res.status(404).json({ msg: "This user does not exists." });
       }
 
+      if (user.isBanned) {
+        return res
+          .status(403)
+          .json({ message: "You have been banned from the site" });
+      }
+
       user.comparePassword(password.toString()).then((isMatch) => {
         if (isMatch) {
           const payload = {
@@ -170,6 +176,36 @@ userController.put(
       res.status(200).json({ message: "Usuario actualizado correctamente" });
     } catch (error) {
       res.status(500).json({ message: "Error en el servidor" });
+    }
+  }
+);
+
+userController.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkPermissionMiddleware("delete_user"),
+  async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+      var findedUser = await User.findById(userId).populate("replies").exec();
+      if (!findedUser) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      findedUser.isBanned = true;
+      await findedUser.save();
+
+      findedUser.replies.forEach((reply) => {
+        reply.isDeleted = true;
+      });
+
+      await Promise.all(findedUser.replies.map((reply) => reply.save()));
+
+      res.status(200).json({ message: "Banned" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 );

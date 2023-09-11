@@ -6,14 +6,21 @@ import Page from "../../components/Page/Page";
 
 const MainCharts = () => {
   const [serieID, setSerieID] = useState("");
+  const [topicID, setTopicID] = useState("");
 
   return (
     <Page>
       <Row style={{ "padding-top": "190px" }} gutter={16}>
         <Col span={4}>
-          <SerieSelector serieID={serieID} setSerieID={setSerieID} />
+          <SerieSelector
+            serieID={serieID}
+            setSerieID={setSerieID}
+            setTopicID={setTopicID}
+          />
         </Col>
-        <Col span={20}>{serieID && <Chart serieID={serieID} />}</Col>
+        <Col span={20}>
+          {serieID && <Chart serieID={serieID} topicID={topicID} />}
+        </Col>
       </Row>
     </Page>
   );
