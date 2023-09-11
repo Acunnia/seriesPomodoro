@@ -108,7 +108,7 @@ const Activity = (props) => {
                 </Link>
               </span>
             </div>
-            <Reply postData={activity} />
+            <Reply minimal postData={activity} />
           </div>
         );
       default:

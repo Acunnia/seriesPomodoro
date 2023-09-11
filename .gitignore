@@ -5,3 +5,4 @@ app/build
 twitch/config.py
 app/client/src/utils/clientConfig.js
 twitch/__pycache__
+TODO.MD
