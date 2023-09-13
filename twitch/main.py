@@ -1,5 +1,4 @@
 import conexion
-import argparse
 import time
 import consultaTwitch as twitch
 from datetime import datetime

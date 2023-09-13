@@ -13,9 +13,14 @@ import {
   Table,
   Typography,
   Divider,
+  Tooltip,
 } from "antd";
 import api from "../../utils/api";
-import { FormOutlined } from "@ant-design/icons";
+import {
+  FormOutlined,
+  CloseCircleOutlined,
+  PushpinOutlined,
+} from "@ant-design/icons";
 import SubCategory from "../../components/SubCategory/SubCategory";
 import { AuthContext } from "../../utils/auth";
 import Page from "../../components/Page/Page";
@@ -26,8 +31,6 @@ const { Text } = Typography;
 
 const TopicList = (props) => {
   const navigate = useNavigate();
-
-  const { state } = useContext(AuthContext);
 
   const [ubication, setUbication] = useState("");
   const [contentLoading, setContentLoading] = useState(true);
@@ -107,7 +110,11 @@ const TopicList = (props) => {
             totalPages: result.data.totalPages,
           });
           setPageLoading(false);
-          navigate(`/category?id=${id}&page=${page}`);
+          navigate(`/category?id=${id}&page=${page}`, {
+            state: {
+              query: "subcat",
+            },
+          });
         })
         .catch((e) => {
           Modal.error({
@@ -150,6 +157,24 @@ const TopicList = (props) => {
   );
 
   const columns = [
+    {
+      title: "Status",
+      key: "status",
+      render: (_, topic) => (
+        <div>
+          {topic.isClosed ? (
+            <Tooltip title="Closed">
+              <CloseCircleOutlined style={{ color: "red", marginRight: 8 }} />
+            </Tooltip>
+          ) : null}
+          {topic.isPinned ? (
+            <Tooltip title="Pinned">
+              <PushpinOutlined style={{ color: "blue" }} />
+            </Tooltip>
+          ) : null}
+        </div>
+      ),
+    },
     {
       title: "Topic",
       dataIndex: "title",

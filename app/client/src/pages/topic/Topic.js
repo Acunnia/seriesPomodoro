@@ -181,27 +181,33 @@ const Topic = (props) => {
       ) : (
         <>
           <br></br>
-          <Card>
-            <Meta title={topic.title} description={topic.description} />
-            <p>Created by: {topic.author.username}</p>
-            {topic.isClosed ? (
-              <>
-                <p style={{ color: "red" }}>Tema cerrado</p>
-                {state && state.admin_level >= 1 && (
-                  <Button type="primary" onClick={handleReabrirTema}>
-                    Reabrir Tema asfvsadfv
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                {state && state.admin_level >= 1 && (
-                  <Button danger onClick={handleCerrarTema}>
-                    Cerrar Tema
-                  </Button>
-                )}
-              </>
-            )}
+          <Card title={topic.title}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                <Meta description={topic.description} />
+                <p>Created by: {topic.author.username}</p>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  {topic.isClosed ? (
+                    <p style={{ color: "red" }}>Tema cerrado</p>
+                  ) : null}
+                </div>
+                <div>
+                  {topic.isClosed && state && state.admin_level >= 1 && (
+                    <Button type="primary" onClick={handleReabrirTema}>
+                      Reabrir Tema
+                    </Button>
+                  )}
+                  {!topic.isClosed && state && state.admin_level >= 1 && (
+                    <Button danger onClick={handleCerrarTema}>
+                      Cerrar Tema
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
           </Card>
           <Divider />
           {pages.totalPages > 1 && pagination}

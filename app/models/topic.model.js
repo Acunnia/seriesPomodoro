@@ -9,6 +9,7 @@ const topicSchema = new mongoose.Schema(
     lastreply: { type: mongoose.Schema.Types.ObjectId, ref: "Reply" },
     replies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reply" }],
     isClosed: { type: Boolean, default: false },
+    isPinned: { type: Boolean, default: false },
   },
   {
     timestamps: true,

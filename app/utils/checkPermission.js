@@ -1,9 +1,10 @@
 const fs = require("fs/promises");
+const AppConfig = require("../models/app-config.model");
 
 async function readConfig() {
   try {
-    const data = await fs.readFile("./utils/settings.json", "utf8");
-    return JSON.parse(data);
+    const data = AppConfig.find()[0];
+    return data;
   } catch (error) {
     console.error("Error al leer el archivo de configuración:", error);
     return null;

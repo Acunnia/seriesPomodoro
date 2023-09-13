@@ -1,3 +1,4 @@
+from datetime import datetime
 import pymongo
 
 import consultaTwitch as twitch
@@ -42,10 +43,19 @@ def getSeries():
     return Conexion.colSeries.find()
 
 def getCategoriasActivas():
-    series = Conexion.colSeries.find({'activa': True}, {'categoriaID': 1, '_id': 0})  # case sensitive
+    fecha_hoy = datetime.now()
+    query = {
+        'activa': True,
+        'fechaInicio': {'$lte': fecha_hoy},
+        'fechaFinal': {'$gte': fecha_hoy}
+    }
+    
+    series = Conexion.colSeries.find(query, {'categoriaID': 1, '_id': 0})
+    
     res = []
     for serie in series:
         res.append(serie['categoriaID'])
+    
     return res
 
 def existeSerie(serie):
