@@ -83,18 +83,28 @@ const UserPublicProfile = () => {
                     <strong>Cantidad de temas:</strong> {user.numTopics}
                   </p>
                 </div>
-                <div className="edit-profile-button">
-                  <Button icon={<EditOutlined />} type="primary">
-                    Editar Perfil
-                  </Button>
-                  <Button
-                    icon={<DeleteOutlined />}
-                    danger
-                    onClick={handleBanUser}
-                  >
-                    Banear Usuario
-                  </Button>
-                </div>
+                {
+                  state.isAuthenticated && state.user.id === user._id ? (
+                    <div className="edit-profile-button">
+                      <Button icon={<EditOutlined />} type="primary">
+                        Editar Perfil
+                      </Button>
+                    </div>
+                  ) : null ///TODO: añadir 404
+                }
+                {
+                  state.isAuthenticated && state.admin_level === 5 ? (
+                    <div className="edit-profile-button">
+                      <Button
+                        icon={<DeleteOutlined />}
+                        danger
+                        onClick={handleBanUser}
+                      >
+                        Banear Usuario
+                      </Button>
+                    </div>
+                  ) : null ///TODO: añadir 404
+                }
               </Col>
             </Row>
           ) : (

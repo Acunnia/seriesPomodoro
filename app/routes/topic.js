@@ -75,6 +75,42 @@ topicController.post(
 );
 
 topicController.post(
+  "/pin",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const topicID = req.body.id;
+
+      const findedTopic = await Topic.findById(topicID).exec();
+
+      findedTopic.isPinned = true;
+      findedTopic.save();
+      return res.status(200).json({ message: "Pinned topic" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error", err });
+    }
+  }
+);
+
+topicController.post(
+  "/unpin",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const topicID = req.body.id;
+
+      const findedTopic = await Topic.findById(topicID).exec();
+
+      findedTopic.isPinned = false;
+      findedTopic.save();
+      return res.status(200).json({ message: "Unpinned topic" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error", err });
+    }
+  }
+);
+
+topicController.post(
   "/create",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {

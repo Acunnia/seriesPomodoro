@@ -19,7 +19,6 @@ const Activity = (props) => {
 
   useEffect(() => {
     api.get("/stats/activity").then((result) => {
-      console.log(result.data.activities);
       setActivities(result.data.activities);
       setLoading(false);
     });

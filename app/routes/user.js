@@ -204,7 +204,6 @@ userController.delete(
 
       res.status(200).json({ message: "Banned" });
     } catch (err) {
-      console.log(err);
       res.status(500).json({ message: "Internal server error" });
     }
   }

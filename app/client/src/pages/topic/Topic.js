@@ -156,6 +156,56 @@ const Topic = (props) => {
       });
   }
 
+  function handlePin(commentData) {
+    setContentLoading(true);
+    api
+      .post(
+        `/topics/pin`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((result) => {
+        setContentLoading(false);
+        topic.isPinned = true;
+        setTopic(topic);
+        message.success("Pinned");
+      })
+      .catch((err) => {
+        setContentLoading(false);
+        message.error("Something went wrong");
+      });
+  }
+
+  function handleUnPin() {
+    setContentLoading(true);
+    api
+      .post(
+        `/topics/unpin`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((result) => {
+        setContentLoading(false);
+        topic.isPinned = false;
+        setTopic(topic);
+        message.success("Unpinned");
+      })
+      .catch((err) => {
+        setContentLoading(false);
+        message.error("Something went wrong");
+      });
+  }
+
   const pagination = (
     <div>
       <Pagination
@@ -191,18 +241,31 @@ const Topic = (props) => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   {topic.isClosed ? (
-                    <p style={{ color: "red" }}>Tema cerrado</p>
+                    <p style={{ color: "red" }}>Closed topic</p>
+                  ) : null}
+                  {topic.isPinned ? (
+                    <p style={{ color: "yellow" }}>Pinned topic</p>
                   ) : null}
                 </div>
                 <div>
                   {topic.isClosed && state && state.admin_level >= 1 && (
                     <Button type="primary" onClick={handleReabrirTema}>
-                      Reabrir Tema
+                      Reopen
                     </Button>
                   )}
                   {!topic.isClosed && state && state.admin_level >= 1 && (
                     <Button danger onClick={handleCerrarTema}>
-                      Cerrar Tema
+                      Close
+                    </Button>
+                  )}
+                  {topic.isPinned && state && state.admin_level >= 1 && (
+                    <Button type="primary" onClick={handleUnPin}>
+                      Unpin topic
+                    </Button>
+                  )}
+                  {!topic.isPinned && state && state.admin_level >= 1 && (
+                    <Button warning onClick={handlePin}>
+                      Pin topic
                     </Button>
                   )}
                 </div>

@@ -27,7 +27,7 @@ function checkPermissionMiddleware(action) {
       console.log(action, userAdminLevel);
       next();
     } else {
-      res.status(403).json({ error: "Permiso denegado" });
+      res.status(403).json({ error: "Permiso denegado por config" });
     }
   };
 }

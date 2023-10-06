@@ -55,7 +55,6 @@ const TopicList = (props) => {
       api
         .get(`/subcategories/topics?id=${id}`)
         .then((result) => {
-          console.log(result.data);
           setSubcategories([]);
           setTopics(result.data.topics);
           setUbication(result.data.name);
@@ -75,7 +74,6 @@ const TopicList = (props) => {
       api
         .get(`/categories/topics?id=${id}`)
         .then((result) => {
-          console.log(result.data);
           setSubcategories(result.data.subcategories);
           setTopics(result.data.topics);
           setUbication(result.data.name);
@@ -101,7 +99,6 @@ const TopicList = (props) => {
       api
         .get(`/subcategories/topics?id=${id}&page=${page}`)
         .then((result) => {
-          console.log(result.data);
           setSubcategories([]);
           setTopics(result.data.topics);
           setUbication(result.data.name);
@@ -126,7 +123,6 @@ const TopicList = (props) => {
       api
         .get(`/categories/topics?id=${id}&page=${page}`)
         .then((result) => {
-          console.log(result.data);
           setTopics(result.data.topics);
           setPages({
             currentPage: result.data.page,

@@ -125,7 +125,7 @@ function App() {
                         <Route path="/admin/config" element={<ConfigForm />} />
                         <Route path="/admin/serie" element={<ReadSeries />} />
                       </>
-                    ) : null ///TODO: añadir 404
+                    ) : null
                   }
                 </Routes>
               </Content>

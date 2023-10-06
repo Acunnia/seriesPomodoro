@@ -72,13 +72,11 @@ export default function ReadSeries() {
         fetchSeries();
       })
       .catch((error) => {
-        // ToDo: Mensaje de error
         console.error("Error al eliminar la serie:", error);
       });
   };
 
   const handleEdit = (data) => {
-    console.log("editandio");
     setMode("edit");
     setSelectedSerie(data);
     setIsModalVisible(true);
@@ -97,7 +95,6 @@ export default function ReadSeries() {
 
   const handleSave = (data) => {
     setIsModalVisible(false);
-    setSelectedSerie(null);
     if (mode === "create") {
       api
         .post("/series/create", data)
@@ -108,11 +105,13 @@ export default function ReadSeries() {
           console.error("Create error:", error);
         });
     } else {
+      const serieID = selectedSerie._id;
       api
-        .put(`/series/edit/${data._id}`, {
-          name: data.name,
-          description: data.description,
-          image: data.image,
+        .put(`/series/edit/${serieID}`, data, {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            "Content-Type": "application/json",
+          },
         })
         .then((response) => {
           fetchSeries();
@@ -121,6 +120,7 @@ export default function ReadSeries() {
           console.error("Create error:", error);
         });
     }
+    setSelectedSerie(null);
   };
 
   const columns = [
@@ -149,7 +149,7 @@ export default function ReadSeries() {
   return (
     <div>
       <Button type="primary" onClick={handleCreate}>
-        Create Role
+        Create new Serie
       </Button>
       <Table
         columns={columns}
